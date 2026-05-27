@@ -26,7 +26,7 @@ export class GameScene extends Phaser.Scene {
 
     this.add
       .text(cx, 80, 'break_eternity demo', { fontSize: '16px', color: '#888888' })
-      .setOrigin(0.5);
+      .setOrigin(0.5).setResolution(2);
 
     // Boss placeholder (vermelho)
     this.add.rectangle(cx, 160, 200, 80, 0xcc2222);
