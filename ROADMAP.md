@@ -3,9 +3,9 @@
 ## Fase 0 — Setup `(1-2 semanas, ~10-15h)`
 - [x] Repo Git, Vite + TS + Phaser + ESLint + Prettier
 - [x] "Hello world" de Phaser rodando
-- [ ] break_eternity integrado e funcionando
-- [ ] Scaffold de pastas
-- [ ] Decidir estilo visual (paleta, mood) usando referências
+- [x] break_eternity integrado e funcionando
+- [x] Scaffold de pastas
+- [x] Decidir estilo visual (paleta, mood) usando referências
 
 **Saída:** projeto vazio mas estruturado.
 
