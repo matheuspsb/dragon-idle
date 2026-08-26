@@ -1,0 +1,21 @@
+import type { KnightsState } from '../state/KnightsState';
+import type { CombatState } from '../state/CombatState';
+import { resolveAutoHit, type CombatEvent } from './combatSystem';
+
+export function tickAutoDps(
+  knightsState: KnightsState,
+  combatState: CombatState,
+  deltaSeconds: number
+): CombatEvent[] {
+  const events: CombatEvent[] = [];
+
+  for (const knight of knightsState.knights) {
+    knight.timeSinceLastAttack += deltaSeconds;
+    while (knight.timeSinceLastAttack >= knight.attackIntervalSeconds) {
+      knight.timeSinceLastAttack -= knight.attackIntervalSeconds;
+      events.push(resolveAutoHit(combatState, knight.damagePerHit));
+    }
+  }
+
+  return events;
+}

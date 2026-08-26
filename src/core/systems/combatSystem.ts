@@ -1,8 +1,8 @@
 import { Decimal } from '../../utils/Decimal';
 import type { DecimalSource } from '../../utils/Decimal';
 import { getCurrentEnemy } from '../entities/Stage';
-import type { EnemyKind } from '../entities/Enemy';
-import { applyDamage, type DamageResult } from './damage';
+import type { Enemy, EnemyKind } from '../entities/Enemy';
+import { applyDamage, applyFlatDamage, type DamageResult } from './damage';
 import { createStage } from './stageGenerator';
 import type { CombatState } from '../state/CombatState';
 
@@ -13,14 +13,7 @@ export interface CombatEvent extends DamageResult {
   newStageNumber?: number;
 }
 
-export function resolveHit(
-  state: CombatState,
-  baseDamage: DecimalSource,
-  rng: () => number = Math.random
-): CombatEvent {
-  const enemy = getCurrentEnemy(state.stage);
-  const damageResult = applyDamage(enemy, baseDamage, rng);
-
+function finalizeHit(state: CombatState, enemy: Enemy, damageResult: DamageResult): CombatEvent {
   const event: CombatEvent = {
     ...damageResult,
     enemyKind: enemy.kind,
@@ -42,4 +35,20 @@ export function resolveHit(
   }
 
   return event;
+}
+
+export function resolveHit(
+  state: CombatState,
+  baseDamage: DecimalSource,
+  rng: () => number = Math.random
+): CombatEvent {
+  const enemy = getCurrentEnemy(state.stage);
+  const damageResult = applyDamage(enemy, baseDamage, rng);
+  return finalizeHit(state, enemy, damageResult);
+}
+
+export function resolveAutoHit(state: CombatState, baseDamage: DecimalSource): CombatEvent {
+  const enemy = getCurrentEnemy(state.stage);
+  const damageResult = applyFlatDamage(enemy, baseDamage);
+  return finalizeHit(state, enemy, damageResult);
 }

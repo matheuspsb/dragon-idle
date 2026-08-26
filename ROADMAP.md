@@ -14,7 +14,7 @@
 ## Fase 1 — Core simulation `(3-4 semanas, ~25h)`
 - [x] Sistema de Big Numbers
 - [x] Modelo de combate (clique → dano → boss HP)
-- [ ] Cavaleiros com DPS auto
+- [x] Cavaleiros com DPS auto
 - [ ] Sistema de ouro e custo de upgrade
 - [ ] Testes unitários do core
 - [ ] Script de balance-sim rodando
