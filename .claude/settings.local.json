@@ -4,7 +4,9 @@
       "PowerShell(node --version)",
       "PowerShell(npm --version)",
       "PowerShell(npm show break_eternity name version description 2>&1)",
-      "PowerShell(npm search break_eternity 2>&1)"
+      "PowerShell(npm search break_eternity 2>&1)",
+      "Bash(npm test *)",
+      "Bash(npm run *)"
     ]
   }
 }
