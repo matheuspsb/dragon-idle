@@ -2,12 +2,12 @@ import type Phaser from 'phaser';
 
 const palette = {
   navy: '#1a1a2e',
+  navyLight: '#2a2a44',
   red: '#cc2222',
   blue: '#2255cc',
   yellow: '#ffcc00',
+  green: '#3fbf5f',
   white: '#ffffff',
-  lavender: '#aaaaff',
-  pink: '#ff88ff',
   gray300: '#aaaaaa',
   gray400: '#888888',
 } as const;
@@ -15,41 +15,51 @@ const palette = {
 export const colors = {
   background: palette.navy,
   boss: palette.red,
+  monster: palette.red,
   knight: palette.blue,
   gold: palette.yellow,
   damageNormal: palette.white,
   damageCrit: palette.yellow,
-  prestige: palette.lavender,
-  infinity: palette.pink,
+  hpBarTrack: palette.navyLight,
+  hpBarFill: palette.green,
   textPrimary: palette.white,
   textSecondary: palette.gray300,
   textMuted: palette.gray400,
 } as const;
 
 export const fontSizes = {
-  title: '36px',
-  subtitle: '16px',
+  hud: '20px',
   body: '18px',
+  small: '14px',
 } as const;
 
 type TextStyle = Phaser.Types.GameObjects.Text.TextStyle;
 
 export const textStyles = {
-  title: { fontSize: fontSizes.title, color: colors.textPrimary, fontStyle: 'bold' },
-  subtitle: { fontSize: fontSizes.subtitle, color: colors.textMuted },
-  label: { fontSize: fontSizes.body, color: colors.textSecondary },
-  value: { fontSize: fontSizes.body, color: colors.textPrimary },
+  hud: { fontSize: fontSizes.hud, color: colors.textPrimary, fontStyle: 'bold' },
+  gold: { fontSize: fontSizes.hud, color: colors.gold, fontStyle: 'bold' },
+  hpText: { fontSize: fontSizes.small, color: colors.textSecondary },
 } as const satisfies Record<string, TextStyle>;
 
 export const spacing = {
-  tableRowHeight: 36,
   knightGap: 120,
+  hpBarOffset: 16,
+  goldIconGap: 12,
 } as const;
 
 export const placeholders = {
   boss: { width: 200, height: 80, color: colors.boss },
+  monster: { width: 120, height: 60, color: colors.monster },
   knight: { width: 40, height: 60, color: colors.knight },
-  gold: { radius: 20, color: colors.gold },
+  gold: { radius: 14, color: colors.gold },
+  hpBar: { width: 220, height: 12 },
+} as const;
+
+export const layout = {
+  stageLabel: { x: 400, y: 40 },
+  enemy: { x: 400, y: 190 },
+  knights: { x: 400, y: 380 },
+  gold: { x: 40, y: 540 },
 } as const;
 
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;

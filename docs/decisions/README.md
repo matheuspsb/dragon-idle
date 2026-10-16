@@ -13,3 +13,4 @@
 | [0009](0009-tick-de-passo-fixo-com-limite.md)                 | Tick de passo fixo com limite de passos por frame      | aceita                                 |
 | [0010](0010-balance-sim-no-terminal.md)                       | Balance-sim no terminal com as regras reais do core    | aceita                                 |
 | [0011](0011-milestone-x4-para-adiar-a-parede.md)              | Milestone ×4 a cada 25 níveis para adiar a parede      | aceita                                 |
+| [0012](0012-sessao-de-jogo-e-render-por-mudanca.md)           | Sessão de jogo pura e render só quando o estado muda   | aceita                                 |

@@ -24,3 +24,8 @@ export function createEnemy(options: CreateEnemyOptions): Enemy {
 export function isEnemyDefeated(enemy: Enemy): boolean {
   return enemy.hp.lte(0);
 }
+
+export function getHpRatio(enemy: Enemy): number {
+  if (!enemy.maxHp.gt(0)) return 0;
+  return Math.min(1, Math.max(0, enemy.hp.div(enemy.maxHp).toNumber()));
+}

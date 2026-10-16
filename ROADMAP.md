@@ -30,7 +30,7 @@
 ## Fase 2 — Gameplay loop visual `(4-5 semanas, ~35h)`
 
 - [x] Base do loop: tick de lógica com passo fixo e tokens do design system com placeholders
-- [ ] Phaser renderizando boss, cavaleiros, ouro
+- [x] Phaser renderizando boss, cavaleiros, ouro (estado real do core, barra de HP, estágio)
 - [ ] Clique funcional com feedback (números flutuantes)
 - [ ] Compra de upgrades via UI
 - [ ] Progressão de boss

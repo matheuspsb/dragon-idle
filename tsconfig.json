@@ -9,7 +9,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "types": []
+    "types": ["vite/client"]
   },
   "include": ["src"]
 }

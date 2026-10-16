@@ -1,13 +1,21 @@
 import type Phaser from 'phaser';
+import type { EnemyKind } from '../core/entities/Enemy';
 import { placeholders, toColorNumber } from './tokens';
 
-export function addBossPlaceholder(
+export function addEnemyPlaceholder(
   scene: Phaser.Scene,
   x: number,
-  y: number
+  y: number,
+  kind: EnemyKind
 ): Phaser.GameObjects.Rectangle {
-  const { width, height, color } = placeholders.boss;
-  return scene.add.rectangle(x, y, width, height, toColorNumber(color));
+  const rect = scene.add.rectangle(x, y, 1, 1);
+  applyEnemyPlaceholder(rect, kind);
+  return rect;
+}
+
+export function applyEnemyPlaceholder(rect: Phaser.GameObjects.Rectangle, kind: EnemyKind): void {
+  const { width, height, color } = placeholders[kind];
+  rect.setSize(width, height).setDisplaySize(width, height).setFillStyle(toColorNumber(color));
 }
 
 export function addKnightPlaceholder(
