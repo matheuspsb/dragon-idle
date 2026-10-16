@@ -9,10 +9,11 @@ export interface PurchaseResult {
 }
 
 export function buyLevels(wallet: WalletState, target: Upgradable, count: number): PurchaseResult {
+  const nothingBought = { levelsBought: 0, goldSpent: new Decimal(0) };
+  if (!Number.isInteger(count) || count <= 0) return nothingBought;
+
   const price = bulkCost(target.baseCost, target.costGrowth, target.level, count);
-  if (count <= 0 || !trySpend(wallet, price)) {
-    return { levelsBought: 0, goldSpent: new Decimal(0) };
-  }
+  if (!trySpend(wallet, price)) return nothingBought;
   target.level += count;
   return { levelsBought: count, goldSpent: price };
 }
