@@ -18,8 +18,9 @@
 - [x] Modelo de combate (clique → dano → boss HP)
 - [x] Cavaleiros com DPS auto
 - [x] Sistema de ouro e custo de upgrade
-- [ ] Testes unitários do core
-- [ ] Script de balance-sim rodando
+- [x] Infraestrutura de qualidade: testes unitários, de regressão e e2e (Playwright), `npm run check`, registro de decisões (`docs/decisions/`) e modelo matemático (`docs/game-math.md`)
+- [x] Testes unitários do core, incluindo casos de borda (dano/tempo inválidos, intervalos ≤ 0, números enormes)
+- [ ] Script de balance-sim rodando — resolver a parede de ouro × custo (ver `docs/game-math.md`)
 
 **Saída:** simulação funciona no terminal, ainda sem UI bonita.
 
@@ -27,6 +28,7 @@
 
 ## Fase 2 — Gameplay loop visual `(4-5 semanas, ~35h)`
 
+- [x] Base do loop: tick de lógica com passo fixo e tokens do design system com placeholders
 - [ ] Phaser renderizando boss, cavaleiros, ouro
 - [ ] Clique funcional com feedback (números flutuantes)
 - [ ] Compra de upgrades via UI
@@ -42,7 +44,7 @@
 
 - [ ] Rebirth implementado
 - [ ] Almas Ancestrais e upgrades permanentes
-- [ ] Cálculo de offline rewards + modal de boas-vindas
+- [ ] Cálculo de offline rewards + modal de boas-vindas (consumir `pendingOfflineSeconds` do ticker, de forma analítica)
 - [ ] Sistema de unlocks por feature flag
 
 **Saída:** loop completo (run → rebirth → próxima run mais forte).

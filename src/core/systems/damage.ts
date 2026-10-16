@@ -23,12 +23,21 @@ function buildDamageResult(enemy: Enemy, outcome: HitOutcome, damageDealt: Decim
   return { outcome, damageDealt, enemyDefeated, overkill };
 }
 
+function toValidDamage(baseDamage: DecimalSource): Decimal {
+  const damage = new Decimal(baseDamage);
+
+  if (!damage.isFinite() || damage.lt(0)) {
+    throw new RangeError(`Invalid damage: ${damage.toString()}`);
+  }
+  return damage;
+}
+
 export function applyDamage(enemy: Enemy, baseDamage: DecimalSource, rng: Rng): DamageResult {
+  const damage = toValidDamage(baseDamage);
   const outcome = rollHitOutcome(rng);
-  const damageDealt = new Decimal(baseDamage).mul(HIT_MULTIPLIERS[outcome]);
-  return buildDamageResult(enemy, outcome, damageDealt);
+  return buildDamageResult(enemy, outcome, damage.mul(HIT_MULTIPLIERS[outcome]));
 }
 
 export function applyFlatDamage(enemy: Enemy, baseDamage: DecimalSource): DamageResult {
-  return buildDamageResult(enemy, 'normal', new Decimal(baseDamage));
+  return buildDamageResult(enemy, 'normal', toValidDamage(baseDamage));
 }

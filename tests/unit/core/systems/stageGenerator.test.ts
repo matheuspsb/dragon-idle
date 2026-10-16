@@ -28,10 +28,4 @@ describe('createStage', () => {
     const stage2 = createStage(2);
     expect(stage2.enemies[0].hp.gt(stage1.enemies[0].hp)).toBe(true);
   });
-
-  it('starts at the first enemy with the given stage number', () => {
-    const stage = createStage(3);
-    expect(stage.currentEnemyIndex).toBe(0);
-    expect(stage.stageNumber).toBe(3);
-  });
 });

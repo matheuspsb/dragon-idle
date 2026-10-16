@@ -9,6 +9,7 @@ export function tickAutoDps(
   deltaSeconds: number
 ): CombatEvent[] {
   const events: CombatEvent[] = [];
+  if (!Number.isFinite(deltaSeconds) || deltaSeconds < 0) return events;
 
   for (const knight of knightsState.knights) {
     knight.timeSinceLastAttack += deltaSeconds;

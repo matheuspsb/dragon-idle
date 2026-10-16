@@ -17,6 +17,10 @@ export interface CreateKnightOptions {
 }
 
 export function createKnight(options: CreateKnightOptions): Knight {
+  const interval = options.attackIntervalSeconds;
+  if (!Number.isFinite(interval) || interval <= 0) {
+    throw new RangeError(`Invalid attack interval: ${interval}`);
+  }
   return {
     level: 1,
     baseDamage: new Decimal(options.damagePerHit),
