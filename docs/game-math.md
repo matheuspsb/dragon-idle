@@ -126,3 +126,20 @@ Com os valores atuais: `ln 1.07 / (ln 2 / 25) ≈ 2.44`, então o ouro precisari
 
 - A lógica roda em passos fixos (`src/systems/fixedStepTicker.ts`, ver [0009](decisions/0009-tick-de-passo-fixo-com-limite.md)). O tempo além do limite por frame vai para o progresso offline, que deve ser calculado de forma analítica (com as fórmulas acima), não golpe a golpe.
 - Toda aleatoriedade vem de um `Rng` injetado; `createSeededRng(seed)` torna qualquer simulação reproduzível (ver [0008](decisions/0008-aleatoriedade-e-tempo-por-injecao.md)).
+
+## Balance-sim
+
+`npm run sim -- --hours=4 --cps=0,5 --seed=1` joga com as regras reais do core e mostra quando cada estágio-marco é alcançado (ver [0010](decisions/0010-balance-sim-no-terminal.md)). Rodar depois de qualquer mudança em `src/config/`.
+
+**Teto de velocidade:** cada golpe mata no máximo um inimigo (o overkill é perdido) e um estágio tem 6 inimigos. Com dano sobrando, o tempo por estágio para em `6 / golpes por segundo` (6 s no idle com 1 cavaleiro; ~1 s no ativo a 5 cliques/s). Quando o sim mostra esse piso, não há parede: o jogo virou corrida.
+
+**Medições de 2026-10-15** (4 h, seed 1; "tempo/estágio" é o tempo gasto no estágio indicado):
+
+| Variante                         | Ouro necessário | Ativo: estágio final | Ativo: tempo/estágio no 100 | Idle: estágio final |
+| -------------------------------- | --------------- | -------------------- | --------------------------- | ------------------- |
+| Atual (×2 a cada 25, ouro ×1.15) | ×1.406          | 102                  | ~13 min                     | 67                  |
+| Ouro ×1.40 por estágio           | ×1.406          | 4521                 | 1 s (piso)                  | 2131                |
+| Milestone ×4 a cada 25           | ×1.186          | 313                  | 4 s (parede ~estágio 300)   | 184                 |
+| Milestone ×2 a cada 10           | ×1.146          | 11921                | 1 s (piso)                  | 2179                |
+
+Leitura: no equilíbrio ou acima dele (ouro ≥ necessário) não existe parede; um pouco abaixo dele a parede só chega horas depois, o que combina com o rebirth da Fase 3.

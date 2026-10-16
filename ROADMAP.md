@@ -20,7 +20,8 @@
 - [x] Sistema de ouro e custo de upgrade
 - [x] Infraestrutura de qualidade: testes unitários, de regressão e e2e (Playwright), `npm run check`, registro de decisões (`docs/decisions/`) e modelo matemático (`docs/game-math.md`)
 - [x] Testes unitários do core, incluindo casos de borda (dano/tempo inválidos, intervalos ≤ 0, números enormes)
-- [ ] Script de balance-sim rodando — resolver a parede de ouro × custo (ver `docs/game-math.md`)
+- [x] Script de balance-sim rodando (`npm run sim`)
+- [ ] Escolher o ajuste da parede de ouro × custo com base no balance-sim (ver `docs/game-math.md`)
 
 **Saída:** simulação funciona no terminal, ainda sem UI bonita.
 

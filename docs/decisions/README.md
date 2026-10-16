@@ -11,3 +11,4 @@
 | [0007](0007-tokens-do-design-system.md)                       | Tokens do design system em `src/ui/tokens.ts`          | aceita |
 | [0008](0008-aleatoriedade-e-tempo-por-injecao.md)             | Aleatoriedade e tempo entram no core por injeção       | aceita |
 | [0009](0009-tick-de-passo-fixo-com-limite.md)                 | Tick de passo fixo com limite de passos por frame      | aceita |
+| [0010](0010-balance-sim-no-terminal.md)                       | Balance-sim no terminal com as regras reais do core    | aceita |
