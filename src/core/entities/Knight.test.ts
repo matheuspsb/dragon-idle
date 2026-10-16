@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { Decimal } from '../../utils/Decimal';
-import { createKnight } from './Knight';
+import { KNIGHT_BASE_COST, UPGRADE_COST_GROWTH } from '../../data/upgradeConfig';
+import { createKnight, getKnightDamage } from './Knight';
 
 describe('createKnight', () => {
-  it('converts damagePerHit to a Decimal', () => {
+  it('deals damagePerHit at level 1', () => {
     const knight = createKnight({ damagePerHit: 5, attackIntervalSeconds: 1 });
-    expect(knight.damagePerHit.toString()).toBe(new Decimal(5).toString());
+    expect(knight.level).toBe(1);
+    expect(getKnightDamage(knight).toNumber()).toBe(5);
   });
 
   it('stores attackIntervalSeconds as given', () => {
@@ -16,5 +17,19 @@ describe('createKnight', () => {
   it('starts with no accumulated attack time', () => {
     const knight = createKnight({ damagePerHit: 5, attackIntervalSeconds: 1 });
     expect(knight.timeSinceLastAttack).toBe(0);
+  });
+
+  it('defaults to the shared knight cost curve', () => {
+    const knight = createKnight({ damagePerHit: 5, attackIntervalSeconds: 1 });
+    expect(knight.baseCost).toBe(KNIGHT_BASE_COST);
+    expect(knight.costGrowth).toBe(UPGRADE_COST_GROWTH);
+  });
+});
+
+describe('getKnightDamage', () => {
+  it('scales with level', () => {
+    const knight = createKnight({ damagePerHit: 5, attackIntervalSeconds: 1 });
+    knight.level = 3;
+    expect(getKnightDamage(knight).toNumber()).toBe(15);
   });
 });

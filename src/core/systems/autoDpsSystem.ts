@@ -1,3 +1,4 @@
+import { getKnightDamage } from '../entities/Knight';
 import type { KnightsState } from '../state/KnightsState';
 import type { CombatState } from '../state/CombatState';
 import { resolveAutoHit, type CombatEvent } from './combatSystem';
@@ -13,7 +14,7 @@ export function tickAutoDps(
     knight.timeSinceLastAttack += deltaSeconds;
     while (knight.timeSinceLastAttack >= knight.attackIntervalSeconds) {
       knight.timeSinceLastAttack -= knight.attackIntervalSeconds;
-      events.push(resolveAutoHit(combatState, knight.damagePerHit));
+      events.push(resolveAutoHit(combatState, getKnightDamage(knight)));
     }
   }
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { STARTING_KNIGHTS } from '../../data/knightConfig';
+import { getKnightDamage } from '../entities/Knight';
 import { createKnightsState } from './KnightsState';
 
 describe('createKnightsState', () => {
@@ -12,7 +13,7 @@ describe('createKnightsState', () => {
     const state = createKnightsState();
     const [knight] = state.knights;
     const [config] = STARTING_KNIGHTS;
-    expect(knight.damagePerHit.toString()).toBe(String(config.damagePerHit));
+    expect(getKnightDamage(knight).toString()).toBe(String(config.damagePerHit));
     expect(knight.attackIntervalSeconds).toBe(config.attackIntervalSeconds);
   });
 });

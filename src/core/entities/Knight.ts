@@ -1,8 +1,11 @@
 import { Decimal } from '../../utils/Decimal';
 import type { DecimalSource } from '../../utils/Decimal';
+import type { Upgradable } from './Upgradable';
+import { levelDamage } from '../systems/levelDamage';
+import { KNIGHT_BASE_COST, UPGRADE_COST_GROWTH } from '../../data/upgradeConfig';
 
-export interface Knight {
-  readonly damagePerHit: Decimal;
+export interface Knight extends Upgradable {
+  readonly baseDamage: Decimal;
   readonly attackIntervalSeconds: number;
   timeSinceLastAttack: number;
 }
@@ -10,12 +13,21 @@ export interface Knight {
 export interface CreateKnightOptions {
   damagePerHit: DecimalSource;
   attackIntervalSeconds: number;
+  baseCost?: DecimalSource;
+  costGrowth?: number;
 }
 
 export function createKnight(options: CreateKnightOptions): Knight {
   return {
-    damagePerHit: new Decimal(options.damagePerHit),
+    level: 1,
+    baseDamage: new Decimal(options.damagePerHit),
+    baseCost: options.baseCost ?? KNIGHT_BASE_COST,
+    costGrowth: options.costGrowth ?? UPGRADE_COST_GROWTH,
     attackIntervalSeconds: options.attackIntervalSeconds,
     timeSinceLastAttack: 0,
   };
+}
+
+export function getKnightDamage(knight: Knight): Decimal {
+  return levelDamage(knight.baseDamage, knight.level);
 }

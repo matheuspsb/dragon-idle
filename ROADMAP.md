@@ -1,6 +1,7 @@
 # Dragon Idle — Roadmap
 
 ## Fase 0 — Setup `(1-2 semanas, ~10-15h)`
+
 - [x] Repo Git, Vite + TS + Phaser + ESLint + Prettier
 - [x] "Hello world" de Phaser rodando
 - [x] break_eternity integrado e funcionando
@@ -12,10 +13,11 @@
 ---
 
 ## Fase 1 — Core simulation `(3-4 semanas, ~25h)`
+
 - [x] Sistema de Big Numbers
 - [x] Modelo de combate (clique → dano → boss HP)
 - [x] Cavaleiros com DPS auto
-- [ ] Sistema de ouro e custo de upgrade
+- [x] Sistema de ouro e custo de upgrade
 - [ ] Testes unitários do core
 - [ ] Script de balance-sim rodando
 
@@ -24,10 +26,11 @@
 ---
 
 ## Fase 2 — Gameplay loop visual `(4-5 semanas, ~35h)`
+
 - [ ] Phaser renderizando boss, cavaleiros, ouro
 - [ ] Clique funcional com feedback (números flutuantes)
 - [ ] Compra de upgrades via UI
-- [ ] Progressão de bosses
+- [ ] Progressão de boss
 - [ ] Save/load LocalStorage
 - [ ] Polimento básico de UX
 
@@ -36,6 +39,7 @@
 ---
 
 ## Fase 3 — Meta-progressão `(3-4 semanas, ~25h)`
+
 - [ ] Rebirth implementado
 - [ ] Almas Ancestrais e upgrades permanentes
 - [ ] Cálculo de offline rewards + modal de boas-vindas
@@ -46,6 +50,7 @@
 ---
 
 ## Fase 4 — Conteúdo e balanceamento `(4-6 semanas, ~40h)`
+
 - [ ] 15 bosses únicos (mesmo que reutilizando sprite com paleta)
 - [ ] 5 cavaleiros com identidade própria
 - [ ] 8 upgrades de alma
@@ -57,6 +62,7 @@
 ---
 
 ## Fase 5 — Polish e Steam `(4-6 semanas, ~40h)`
+
 - [ ] Arte final (asset packs ou comissão)
 - [ ] Música e sound design completos
 - [ ] Empacotamento Electron
@@ -70,6 +76,7 @@
 ---
 
 ## Fase 6 — Lançamento e pós `(contínuo)`
+
 - [ ] Steam release
 - [ ] Patches de bugs nas primeiras 2 semanas
 - [ ] Decidir baseado em vendas: DLC? Sequência? Próximo projeto?
