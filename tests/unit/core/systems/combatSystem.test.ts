@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { createCombatState } from '../state/CombatState';
-import { getCurrentEnemy } from '../entities/Stage';
-import { resolveAutoHit, resolveHit } from './combatSystem';
+import { createCombatState } from '../../../../src/core/systems/combatSystem';
+import { getCurrentEnemy } from '../../../../src/core/entities/Stage';
+import { resolveAutoHit, resolveHit } from '../../../../src/core/systems/combatSystem';
 
 const rngNormal = () => 0.5;
 

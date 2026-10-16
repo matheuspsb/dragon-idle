@@ -8,7 +8,7 @@ import {
   BOSS_HP_MULTIPLIER,
   BASE_GOLD_REWARD,
   GOLD_GROWTH_PER_STAGE,
-} from '../../data/stageConfig';
+} from '../../config/stageConfig';
 
 export function createStage(stageNumber: number): Stage {
   const monsterHp = new Decimal(BASE_MONSTER_HP).mul(

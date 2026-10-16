@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { STARTING_KNIGHTS } from '../../data/knightConfig';
-import { getKnightDamage } from '../entities/Knight';
-import { createKnightsState } from './KnightsState';
+import { STARTING_KNIGHTS } from '../../../../src/config/knightConfig';
+import { getKnightDamage } from '../../../../src/core/systems/levelDamage';
+import { createKnightsState } from '../../../../src/core/state/KnightsState';
 
 describe('createKnightsState', () => {
   it('seeds one knight per entry in STARTING_KNIGHTS', () => {

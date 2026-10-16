@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createEnemy, isEnemyDefeated } from './Enemy';
+import { createEnemy, isEnemyDefeated } from '../../../../src/core/entities/Enemy';
 
 describe('Enemy', () => {
   it('starts at full hp equal to maxHp', () => {

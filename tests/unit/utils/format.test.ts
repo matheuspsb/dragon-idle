@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Decimal } from './Decimal';
-import { formatNumber } from './format';
+import { Decimal } from '../../../src/utils/Decimal';
+import { formatNumber } from '../../../src/utils/format';
 
 describe('formatNumber', () => {
   it('renders plain integers under 1000 with no suffix', () => {

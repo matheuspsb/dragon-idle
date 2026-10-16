@@ -1,4 +1,4 @@
-import { CRIT_CHANCE, SUPER_CRIT_CHANCE, type HitOutcome } from '../../data/critConfig';
+import { CRIT_CHANCE, SUPER_CRIT_CHANCE, type HitOutcome } from '../../config/critConfig';
 
 export function rollHitOutcome(rng: () => number = Math.random): HitOutcome {
   const roll = rng();

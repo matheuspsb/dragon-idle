@@ -5,7 +5,7 @@
  * e devolvia 2^3 = 7.999999999999999 em vez de 8, gerando dano fracionado.
  */
 import { describe, expect, it } from 'vitest';
-import { MILESTONE_INTERVAL, MILESTONE_MULTIPLIER } from '../../src/data/upgradeConfig';
+import { MILESTONE_INTERVAL, MILESTONE_MULTIPLIER } from '../../src/config/upgradeConfig';
 import { levelDamage, milestoneMultiplier } from '../../src/core/systems/levelDamage';
 
 describe('milestone multiplier is exact', () => {

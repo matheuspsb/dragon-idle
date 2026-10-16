@@ -6,6 +6,10 @@ import { applyDamage, applyFlatDamage, type DamageResult } from './damage';
 import { createStage } from './stageGenerator';
 import type { CombatState } from '../state/CombatState';
 
+export function createCombatState(startingStageNumber = 1): CombatState {
+  return { stage: createStage(startingStageNumber) };
+}
+
 export interface CombatEvent extends DamageResult {
   enemyKind: EnemyKind;
   goldEarned: Decimal;

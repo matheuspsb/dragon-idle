@@ -2,7 +2,7 @@ import { Decimal } from '../../utils/Decimal';
 import type { DecimalSource } from '../../utils/Decimal';
 import { isEnemyDefeated, type Enemy } from '../entities/Enemy';
 import { rollHitOutcome } from './critRoll';
-import { HIT_MULTIPLIERS, type HitOutcome } from '../../data/critConfig';
+import { HIT_MULTIPLIERS, type HitOutcome } from '../../config/critConfig';
 
 export interface DamageResult {
   outcome: HitOutcome;

@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { Decimal } from '../../utils/Decimal';
-import { CRIT_MULTIPLIER, SUPER_CRIT_MULTIPLIER, SUPER_CRIT_CHANCE } from '../../data/critConfig';
-import { createEnemy } from '../entities/Enemy';
-import { applyDamage, applyFlatDamage } from './damage';
+import { Decimal } from '../../../../src/utils/Decimal';
+import {
+  CRIT_MULTIPLIER,
+  SUPER_CRIT_MULTIPLIER,
+  SUPER_CRIT_CHANCE,
+} from '../../../../src/config/critConfig';
+import { createEnemy } from '../../../../src/core/entities/Enemy';
+import { applyDamage, applyFlatDamage } from '../../../../src/core/systems/damage';
 
 const rngNormal = () => 0.999999;
 const rngCrit = () => SUPER_CRIT_CHANCE;

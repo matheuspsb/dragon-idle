@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MILESTONE_INTERVAL, MILESTONE_MULTIPLIER } from '../../data/upgradeConfig';
-import { levelDamage, milestoneMultiplier } from './levelDamage';
+import { MILESTONE_INTERVAL, MILESTONE_MULTIPLIER } from '../../../../src/config/upgradeConfig';
+import { levelDamage, milestoneMultiplier } from '../../../../src/core/systems/levelDamage';
 
 describe('milestoneMultiplier', () => {
   it('is 1 below the first milestone', () => {

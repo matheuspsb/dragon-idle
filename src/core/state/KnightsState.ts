@@ -1,5 +1,5 @@
 import { createKnight, type Knight } from '../entities/Knight';
-import { STARTING_KNIGHTS } from '../../data/knightConfig';
+import { STARTING_KNIGHTS } from '../../config/knightConfig';
 
 export interface KnightsState {
   knights: Knight[];

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { KNIGHT_BASE_COST, UPGRADE_COST_GROWTH } from '../../data/upgradeConfig';
-import { createKnight, getKnightDamage } from './Knight';
+import { KNIGHT_BASE_COST, UPGRADE_COST_GROWTH } from '../../../../src/config/upgradeConfig';
+import { createKnight } from '../../../../src/core/entities/Knight';
+import { getKnightDamage } from '../../../../src/core/systems/levelDamage';
 
 describe('createKnight', () => {
   it('deals damagePerHit at level 1', () => {

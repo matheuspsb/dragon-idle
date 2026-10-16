@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { CRIT_CHANCE, SUPER_CRIT_CHANCE } from '../../data/critConfig';
-import { rollHitOutcome } from './critRoll';
+import { CRIT_CHANCE, SUPER_CRIT_CHANCE } from '../../../../src/config/critConfig';
+import { rollHitOutcome } from '../../../../src/core/systems/critRoll';
 
 describe('rollHitOutcome', () => {
   it('returns superCrit at the bottom of the range', () => {

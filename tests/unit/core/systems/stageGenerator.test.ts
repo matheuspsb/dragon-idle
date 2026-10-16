@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MONSTERS_PER_STAGE } from '../../data/stageConfig';
-import { createStage } from './stageGenerator';
+import { MONSTERS_PER_STAGE } from '../../../../src/config/stageConfig';
+import { createStage } from '../../../../src/core/systems/stageGenerator';
 
 describe('createStage', () => {
   it('creates MONSTERS_PER_STAGE monsters plus one boss', () => {

@@ -15,7 +15,7 @@ O sistema de ouro precisava de uma curva de custo que não deixasse o jogo fáci
 - **Produção:** dano cresce linear com o nível, `× 2` a cada 25 níveis (milestones).
 - Clique e cavaleiros usam o mesmo contrato `Upgradable` (`level`, `baseCost`, `costGrowth`).
 
-Valores em `src/data/upgradeConfig.ts`.
+Valores em `src/config/upgradeConfig.ts`.
 
 ## Alternativas consideradas
 

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { createKnight } from '../entities/Knight';
-import { createCombatState } from '../state/CombatState';
-import { getCurrentEnemy } from '../entities/Stage';
-import { BASE_MONSTER_HP } from '../../data/stageConfig';
-import { tickAutoDps } from './autoDpsSystem';
+import { createKnight } from '../../../../src/core/entities/Knight';
+import { createCombatState } from '../../../../src/core/systems/combatSystem';
+import { getCurrentEnemy } from '../../../../src/core/entities/Stage';
+import { BASE_MONSTER_HP } from '../../../../src/config/stageConfig';
+import { tickAutoDps } from '../../../../src/core/systems/autoDpsSystem';
 
 describe('tickAutoDps', () => {
   it('produces no events when deltaSeconds is below the attack interval', () => {

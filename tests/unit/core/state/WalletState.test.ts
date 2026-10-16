@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { Decimal } from '../../utils/Decimal';
-import { addGold, collectGold, createWalletState, trySpend } from './WalletState';
-import type { CombatEvent } from '../systems/combatSystem';
+import { Decimal } from '../../../../src/utils/Decimal';
+import { addGold, createWalletState, trySpend } from '../../../../src/core/state/WalletState';
+import { collectGold } from '../../../../src/core/systems/goldSystem';
+import type { CombatEvent } from '../../../../src/core/systems/combatSystem';
 
 function eventWithGold(gold: number): CombatEvent {
   return {

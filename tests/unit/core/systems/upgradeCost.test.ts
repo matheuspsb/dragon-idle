@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Decimal } from '../../utils/Decimal';
-import { bulkCost, maxAffordable, nextCost } from './upgradeCost';
+import { Decimal } from '../../../../src/utils/Decimal';
+import { bulkCost, maxAffordable, nextCost } from '../../../../src/core/systems/upgradeCost';
 
 describe('nextCost', () => {
   it('equals the base cost at level 0', () => {

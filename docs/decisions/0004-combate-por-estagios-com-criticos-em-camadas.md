@@ -15,7 +15,7 @@ O núcleo do jogo é clicar (e ter cavaleiros atacando) para derrotar inimigos e
 - **Cavaleiros:** dano fixo por ataque em intervalo próprio, sem crítico.
 - O gerador de aleatoriedade é injetável (`rng`) para testes determinísticos.
 
-Todos os números são placeholders em `src/data/stageConfig.ts` e `src/data/critConfig.ts`, a ajustar na Fase 4.
+Todos os números são placeholders em `src/config/stageConfig.ts` e `src/config/critConfig.ts`, a ajustar na Fase 4.
 
 ## Alternativas consideradas
 

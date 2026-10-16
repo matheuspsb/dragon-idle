@@ -1,4 +1,4 @@
-import { getKnightDamage } from '../entities/Knight';
+import { getKnightDamage } from './levelDamage';
 import type { KnightsState } from '../state/KnightsState';
 import type { CombatState } from '../state/CombatState';
 import { resolveAutoHit, type CombatEvent } from './combatSystem';

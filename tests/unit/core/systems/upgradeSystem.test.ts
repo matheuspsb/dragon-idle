@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { createWalletState } from '../state/WalletState';
-import type { Upgradable } from '../entities/Upgradable';
-import { bulkCost, nextCost } from './upgradeCost';
-import { buyLevels, buyMaxLevels } from './upgradeSystem';
+import { createWalletState } from '../../../../src/core/state/WalletState';
+import type { Upgradable } from '../../../../src/core/entities/Upgradable';
+import { bulkCost, nextCost } from '../../../../src/core/systems/upgradeCost';
+import { buyLevels, buyMaxLevels } from '../../../../src/core/systems/upgradeSystem';
 
 function makeUpgradable(level = 1): Upgradable {
   return { level, baseCost: 10, costGrowth: 1.07 };
