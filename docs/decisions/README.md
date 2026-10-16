@@ -9,3 +9,4 @@
 | [0005](0005-custo-exponencial-de-upgrades.md)                 | Custo exponencial de upgrades com milestones           | aceita |
 | [0006](0006-estrutura-de-pastas-e-direcao-de-dependencias.md) | Estrutura de pastas e direção das dependências no core | aceita |
 | [0007](0007-tokens-do-design-system.md)                       | Tokens do design system em `src/ui/tokens.ts`          | aceita |
+| [0008](0008-aleatoriedade-e-tempo-por-injecao.md)             | Aleatoriedade e tempo entram no core por injeção       | aceita |

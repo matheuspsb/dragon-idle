@@ -1,3 +1,4 @@
+import type { Rng } from '../../utils/random';
 import { Decimal } from '../../utils/Decimal';
 import type { DecimalSource } from '../../utils/Decimal';
 import { getCurrentEnemy } from '../entities/Stage';
@@ -41,11 +42,7 @@ function finalizeHit(state: CombatState, enemy: Enemy, damageResult: DamageResul
   return event;
 }
 
-export function resolveHit(
-  state: CombatState,
-  baseDamage: DecimalSource,
-  rng: () => number = Math.random
-): CombatEvent {
+export function resolveHit(state: CombatState, baseDamage: DecimalSource, rng: Rng): CombatEvent {
   const enemy = getCurrentEnemy(state.stage);
   const damageResult = applyDamage(enemy, baseDamage, rng);
   return finalizeHit(state, enemy, damageResult);

@@ -1,3 +1,4 @@
+import type { Rng } from '../../utils/random';
 import { Decimal } from '../../utils/Decimal';
 import type { DecimalSource } from '../../utils/Decimal';
 import { isEnemyDefeated, type Enemy } from '../entities/Enemy';
@@ -22,11 +23,7 @@ function buildDamageResult(enemy: Enemy, outcome: HitOutcome, damageDealt: Decim
   return { outcome, damageDealt, enemyDefeated, overkill };
 }
 
-export function applyDamage(
-  enemy: Enemy,
-  baseDamage: DecimalSource,
-  rng: () => number = Math.random
-): DamageResult {
+export function applyDamage(enemy: Enemy, baseDamage: DecimalSource, rng: Rng): DamageResult {
   const outcome = rollHitOutcome(rng);
   const damageDealt = new Decimal(baseDamage).mul(HIT_MULTIPLIERS[outcome]);
   return buildDamageResult(enemy, outcome, damageDealt);
