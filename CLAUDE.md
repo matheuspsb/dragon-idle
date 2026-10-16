@@ -27,6 +27,10 @@ Essas cores e formas vivem em um único lugar (tokens do design system, ver Arqu
 
 Ver [ROADMAP.md](ROADMAP.md).
 
+## Modelo matemático
+
+A economia e o combate seguem o modelo de idle games da Kongregate: custo exponencial (`custo = base × r^nível`, `r = 1.07`) contra produção linear com milestones. Fórmulas, valores atuais e a condição de equilíbrio estão em [docs/game-math.md](docs/game-math.md). Ler antes de mexer em balanceamento, custos, dano, recompensas ou progressão, e atualizar o documento quando uma fórmula ou constante estrutural mudar.
+
 ## Fluxo de trabalho (TDD)
 
 Todo código novo segue TDD: escrever o teste que falha, fazer passar com a implementação mais simples, depois refatorar com os testes verdes. Não implementar antes de existir um teste descrevendo o comportamento esperado.

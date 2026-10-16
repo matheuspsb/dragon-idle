@@ -1,0 +1,128 @@
+# Modelo matemático do jogo
+
+Referência das fórmulas que regem a economia e o combate. Base: Anthony Pecorella (Kongregate), [_The Math of Idle Games, Part I_](https://www.gamedeveloper.com/design/the-math-of-idle-games-part-i), com valores de referência do Clicker Heroes e do AdVenture Capitalist. A decisão de adotar o modelo está em [0005](decisions/0005-custo-exponencial-de-upgrades.md); o combate, em [0004](decisions/0004-combate-por-estagios-com-criticos-em-camadas.md).
+
+Todos os valores numéricos são placeholders em `src/config/`, a ajustar com o balance-sim e na Fase 4. Ao mudar uma fórmula ou constante estrutural, atualizar este documento.
+
+## A ideia central
+
+> O custo cresce de forma **exponencial**; a produção cresce de forma **linear** (com saltos).
+
+Exponencial sempre vence linear no longo prazo. No começo a produção ganha (tudo é barato); depois o custo dispara e o jogador "bate na parede". Os **milestones** dão alívio periódico e o **rebirth** (Fase 3) recomeça a curva com um bônus permanente. Esse vai e vem entre aperto e alívio é o que dá ritmo ao jogo.
+
+## Notação
+
+| Símbolo | Significado                              | Valor atual            |
+| ------- | ---------------------------------------- | ---------------------- |
+| `b`     | custo base do upgrade                    | clique 5, cavaleiro 10 |
+| `r`     | taxa de crescimento do custo (por nível) | 1.07                   |
+| `k`     | nível atual                              | começa em 1            |
+| `n`     | quantidade de níveis a comprar           | —                      |
+| `c`     | ouro disponível                          | —                      |
+| `M`     | intervalo de milestone (em níveis)       | 25                     |
+| `m`     | multiplicador de milestone               | 2                      |
+| `s`     | número do estágio                        | começa em 1            |
+
+## Economia (upgrades)
+
+Código: `src/core/systems/upgradeCost.ts`, `src/core/systems/upgradeSystem.ts`.
+
+**Custo do próximo nível**
+
+```
+custo(k) = b × r^k
+```
+
+Cada nível custa `r − 1` (7%) a mais que o anterior; o custo dobra a cada `ln 2 / ln r ≈ 10.2` níveis.
+
+**Custo de comprar `n` níveis de uma vez** (soma da progressão geométrica)
+
+```
+custo(k, n) = b × r^k × (r^n − 1) / (r − 1)        (se r = 1: b × n)
+```
+
+**Máximo de níveis que dá para comprar com `c` de ouro**
+
+```
+max = floor( log_r( c × (r − 1) / (b × r^k) + 1 ) )
+```
+
+O log em ponto flutuante pode errar por 1 exatamente no limite, então o código ajusta o resultado conferindo contra `custo(k, n)`.
+
+**Faixa usual de `r`:** 1.07 a 1.15. Perto de 1.03 o jogo fica fácil demais; perto de 1.15 a parede chega cedo.
+
+## Produção (dano)
+
+Código: `src/core/systems/levelDamage.ts`.
+
+```
+dano(k) = dano_base × k × m^floor(k / M)
+```
+
+Linear no nível, multiplicado por `m` a cada `M` níveis. O multiplicador é calculado com potência nativa (`m ** x`) enquanto cabe em `number`, porque `Decimal.pow` erra potências inteiras (ver [0003](decisions/0003-break-eternity-para-numeros-grandes.md)).
+
+**Ouro por ponto de dano** (quanto o próximo nível cobra por cada dano extra que dá):
+
+```
+custo(k) / (dano(k + 1) − dano(k))
+```
+
+Esse valor sobe sempre e cai a cada milestone. É a métrica mais útil para sentir a "parede".
+
+## Combate e progressão
+
+Código: `src/core/systems/stageGenerator.ts`, `src/core/systems/critRoll.ts`, `src/core/systems/damage.ts`.
+
+**Inimigos por estágio:** 5 monstros + 1 boss.
+
+```
+HP_monstro(s)   = 20 × 1.15^(s − 1)
+ouro_monstro(s) =  1 × 1.15^(s − 1)
+boss            = 8 × monstro   (HP e ouro)
+```
+
+Totais por estágio: `HP(s) = 260 × 1.15^(s − 1)` e `ouro(s) = 13 × 1.15^(s − 1)`.
+
+**Tempo para limpar um estágio:** `t(s) = HP(s) / DPS`.
+
+**Críticos (só no clique):** um sorteio decide o resultado. Super crítico: 1%, `× 10`. Crítico: 12%, `× 2.5`. Normal: o resto.
+
+Multiplicador médio de um clique:
+
+```
+E = 1 + 0.12 × (2.5 − 1) + 0.01 × (10 − 1) = 1.27
+```
+
+**Cavaleiros:** dano fixo `dano(k)` a cada `intervalo` segundos (hoje 1 s), sem crítico. `DPS_cavaleiro = dano(k) / intervalo`.
+
+## Condição de equilíbrio (a "parede")
+
+Para avançar um estágio, o dano precisa crescer `× 1.15` (o crescimento do HP). Ignorando o termo linear, o dano cresce `m^(1/M)` por nível, então são necessários
+
+```
+níveis por estágio = ln(1.15) / ln(m^(1/M))
+```
+
+e o custo desses níveis cresce, por estágio,
+
+```
+crescimento do custo por estágio = 1.15^( ln r / ln(m^(1/M)) )
+```
+
+O jogo só se sustenta se o ouro por estágio crescer pelo menos isso:
+
+```
+crescimento do ouro ≥ crescimento_HP^( ln r / ln(m^(1/M)) )
+```
+
+Com os valores atuais: `ln 1.07 / (ln 2 / 25) ≈ 2.44`, então o ouro precisaria crescer `1.15^2.44 ≈ 1.41` por estágio. **Hoje ele cresce 1.15**, o que cria uma parede cedo. Formas de ajustar (a decidir com o balance-sim):
+
+- aumentar o crescimento do ouro por estágio;
+- diminuir `r`;
+- milestones mais fortes ou mais frequentes (aumentar `m^(1/M)`);
+- aceitar a parede e resolver com rebirth (Fase 3).
+
+## Tempo e simulação
+
+- A lógica roda em passos fixos (`src/systems/fixedStepTicker.ts`, ver [0009](decisions/0009-tick-de-passo-fixo-com-limite.md)). O tempo além do limite por frame vai para o progresso offline, que deve ser calculado de forma analítica (com as fórmulas acima), não golpe a golpe.
+- Toda aleatoriedade vem de um `Rng` injetado; `createSeededRng(seed)` torna qualquer simulação reproduzível (ver [0008](decisions/0008-aleatoriedade-e-tempo-por-injecao.md)).
