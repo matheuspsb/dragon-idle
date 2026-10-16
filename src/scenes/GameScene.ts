@@ -26,7 +26,8 @@ export class GameScene extends Phaser.Scene {
 
     this.add
       .text(cx, 80, 'break_eternity demo', { fontSize: '16px', color: '#888888' })
-      .setOrigin(0.5).setResolution(2);
+      .setOrigin(0.5)
+      .setResolution(2);
 
     // Boss placeholder (vermelho)
     this.add.rectangle(cx, 160, 200, 80, 0xcc2222);
@@ -43,10 +44,7 @@ export class GameScene extends Phaser.Scene {
     DEMO_VALUES.forEach(({ label, value, color }, i) => {
       const y = 370 + i * 36;
       this.add.text(cx - 160, y, label, { fontSize: '18px', color: '#aaaaaa' });
-      this.add.text(cx + 160, y, formatNumber(value), { fontSize: '18px', color }).setOrigin(
-        1,
-        0
-      );
+      this.add.text(cx + 160, y, formatNumber(value), { fontSize: '18px', color }).setOrigin(1, 0);
     });
   }
 }

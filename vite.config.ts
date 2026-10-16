@@ -6,4 +6,7 @@ export default defineConfig({
     outDir: 'dist',
     target: 'esnext',
   },
+  test: {
+    exclude: ['**/node_modules/**', 'tests/e2e/**'],
+  },
 });
