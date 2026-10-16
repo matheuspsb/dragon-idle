@@ -1,4 +1,4 @@
-// Placeholder curve — real balance is Fase 4's job.
+// Placeholder curve — real balance is Fase 4's job. Ver docs/decisions/0004.
 export const MONSTERS_PER_STAGE = 5;
 export const BASE_MONSTER_HP = 20;
 export const HP_GROWTH_PER_STAGE = 1.15;
