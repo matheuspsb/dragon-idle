@@ -1,7 +1,7 @@
 # 0005 — Custo exponencial de upgrades com milestones
 
 - **Data:** 2026-10-15
-- **Status:** aceita
+- **Status:** aceita; o multiplicador de milestone (×2) foi substituído por 0011
 
 ## Contexto
 

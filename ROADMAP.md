@@ -21,7 +21,7 @@
 - [x] Infraestrutura de qualidade: testes unitários, de regressão e e2e (Playwright), `npm run check`, registro de decisões (`docs/decisions/`) e modelo matemático (`docs/game-math.md`)
 - [x] Testes unitários do core, incluindo casos de borda (dano/tempo inválidos, intervalos ≤ 0, números enormes)
 - [x] Script de balance-sim rodando (`npm run sim`)
-- [ ] Escolher o ajuste da parede de ouro × custo com base no balance-sim (ver `docs/game-math.md`)
+- [x] Ajuste da parede de ouro × custo com o balance-sim: milestone ×4 a cada 25 níveis (ver `docs/decisions/0011`)
 
 **Saída:** simulação funciona no terminal, ainda sem UI bonita.
 

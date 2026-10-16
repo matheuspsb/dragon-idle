@@ -20,7 +20,7 @@ Exponencial sempre vence linear no longo prazo. No começo a produção ganha (t
 | `n`     | quantidade de níveis a comprar           | —                      |
 | `c`     | ouro disponível                          | —                      |
 | `M`     | intervalo de milestone (em níveis)       | 25                     |
-| `m`     | multiplicador de milestone               | 2                      |
+| `m`     | multiplicador de milestone               | 4                      |
 | `s`     | número do estágio                        | começa em 1            |
 
 ## Economia (upgrades)
@@ -115,12 +115,14 @@ O jogo só se sustenta se o ouro por estágio crescer pelo menos isso:
 crescimento do ouro ≥ crescimento_HP^( ln r / ln(m^(1/M)) )
 ```
 
-Com os valores atuais: `ln 1.07 / (ln 2 / 25) ≈ 2.44`, então o ouro precisaria crescer `1.15^2.44 ≈ 1.41` por estágio. **Hoje ele cresce 1.15**, o que cria uma parede cedo. Formas de ajustar (a decidir com o balance-sim):
+Com os valores atuais (`m = 4`): `ln 1.07 / (ln 4 / 25) ≈ 1.22`, então o ouro precisaria crescer `1.15^1.22 ≈ 1.186` por estágio. Ele cresce `1.15`, **um pouco abaixo de propósito**: a parede existe, mas só chega depois de algumas horas, o que leva o jogador ao rebirth (Fase 3). Com `m = 2` o necessário era `≈ 1.41` e a parede chegava em ~40 min (ver [0011](decisions/0011-milestone-x4-para-adiar-a-parede.md)).
 
-- aumentar o crescimento do ouro por estágio;
-- diminuir `r`;
+Alavancas, se for preciso mover a parede de novo:
+
+- crescimento do ouro por estágio (mais perto do necessário = parede mais tarde; igual ou acima = sem parede);
+- `r` (menor = parede mais tarde);
 - milestones mais fortes ou mais frequentes (aumentar `m^(1/M)`);
-- aceitar a parede e resolver com rebirth (Fase 3).
+- rebirth (Fase 3), que recomeça a curva com bônus.
 
 ## Tempo e simulação
 
@@ -135,11 +137,13 @@ Com os valores atuais: `ln 1.07 / (ln 2 / 25) ≈ 2.44`, então o ouro precisari
 
 **Medições de 2026-10-15** (4 h, seed 1; "tempo/estágio" é o tempo gasto no estágio indicado):
 
-| Variante                         | Ouro necessário | Ativo: estágio final | Ativo: tempo/estágio no 100 | Idle: estágio final |
-| -------------------------------- | --------------- | -------------------- | --------------------------- | ------------------- |
-| Atual (×2 a cada 25, ouro ×1.15) | ×1.406          | 102                  | ~13 min                     | 67                  |
-| Ouro ×1.40 por estágio           | ×1.406          | 4521                 | 1 s (piso)                  | 2131                |
-| Milestone ×4 a cada 25           | ×1.186          | 313                  | 4 s (parede ~estágio 300)   | 184                 |
-| Milestone ×2 a cada 10           | ×1.146          | 11921                | 1 s (piso)                  | 2179                |
+| Variante                          | Ouro necessário | Ativo: estágio final | Ativo: tempo/estágio no 100 | Idle: estágio final |
+| --------------------------------- | --------------- | -------------------- | --------------------------- | ------------------- |
+| Anterior (×2 a cada 25)           | ×1.406          | 102                  | ~13 min                     | 67                  |
+| Ouro ×1.40 por estágio            | ×1.406          | 4521                 | 1 s (piso)                  | 2131                |
+| **Atual: milestone ×4 a cada 25** | ×1.186          | 313                  | 4 s (parede ~estágio 300)   | 184                 |
+| Milestone ×2 a cada 10            | ×1.146          | 11921                | 1 s (piso)                  | 2179                |
 
-Leitura: no equilíbrio ou acima dele (ouro ≥ necessário) não existe parede; um pouco abaixo dele a parede só chega horas depois, o que combina com o rebirth da Fase 3.
+Todas as variantes usam ouro ×1.15 por estágio, exceto a que muda o ouro. Leitura: no equilíbrio ou acima dele (ouro ≥ necessário) não existe parede; um pouco abaixo dele a parede só chega horas depois, o que combina com o rebirth da Fase 3.
+
+**Curva atual em 8 h** (seed 1): no ativo, estágio 200 em 28 min e 300 em 3 h, terminando no 347 (só +34 estágios entre a 4ª e a 8ª hora, ~5,5 min por estágio no 300); no idle, estágio 100 em 1h16 e 200 em 5h07, terminando no 226.

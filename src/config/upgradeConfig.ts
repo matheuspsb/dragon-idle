@@ -8,5 +8,6 @@ export const CLICK_BASE_DAMAGE = 1;
 
 // Every MILESTONE_INTERVAL levels, damage is multiplied by MILESTONE_MULTIPLIER.
 // Linear damage alone can never keep up with exponential cost; milestones bend it.
+// Ver docs/decisions/0011.
 export const MILESTONE_INTERVAL = 25;
-export const MILESTONE_MULTIPLIER = 2;
+export const MILESTONE_MULTIPLIER = 4;
