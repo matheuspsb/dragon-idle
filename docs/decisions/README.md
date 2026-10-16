@@ -8,3 +8,4 @@
 | [0004](0004-combate-por-estagios-com-criticos-em-camadas.md)  | Combate por estágios com críticos em camadas           | aceita |
 | [0005](0005-custo-exponencial-de-upgrades.md)                 | Custo exponencial de upgrades com milestones           | aceita |
 | [0006](0006-estrutura-de-pastas-e-direcao-de-dependencias.md) | Estrutura de pastas e direção das dependências no core | aceita |
+| [0007](0007-tokens-do-design-system.md)                       | Tokens do design system em `src/ui/tokens.ts`          | aceita |
