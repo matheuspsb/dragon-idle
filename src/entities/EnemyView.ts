@@ -9,11 +9,17 @@ export class EnemyView {
   private readonly body: Phaser.GameObjects.Rectangle;
   private readonly hpBarFill: Phaser.GameObjects.Rectangle;
   private readonly hpText: Phaser.GameObjects.Text;
+  private readonly hitZone: Phaser.GameObjects.Zone;
   private shownEnemy?: Enemy;
   private shownHp?: Decimal;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     this.body = addEnemyPlaceholder(scene, x, y, 'monster');
+    // Fixed boss-sized target: a rectangle's hit area doesn't follow setSize when
+    // the enemy switches between monster and boss.
+    this.hitZone = scene.add
+      .zone(x, y, placeholders.boss.width, placeholders.boss.height)
+      .setInteractive({ useHandCursor: true });
 
     const { width, height } = placeholders.hpBar;
     const barY = y + placeholders.boss.height / 2 + spacing.hpBarOffset;
@@ -24,6 +30,10 @@ export class EnemyView {
     this.hpText = scene.add
       .text(x, barY + height + spacing.hpBarOffset / 2, '', textStyles.hpText)
       .setOrigin(0.5, 0);
+  }
+
+  onClick(handler: () => void): void {
+    this.hitZone.on('pointerdown', handler);
   }
 
   render(enemy: Enemy): void {

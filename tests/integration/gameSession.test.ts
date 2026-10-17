@@ -1,8 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { getCurrentEnemy } from '../../src/core/entities/Stage';
-import { getKnightDamage } from '../../src/core/systems/levelDamage';
-import { advanceGameSession, createGameSession } from '../../src/core/systems/gameSession';
+import { getClickDamage, getKnightDamage } from '../../src/core/systems/levelDamage';
+import {
+  advanceGameSession,
+  clickGameSession,
+  createGameSession,
+} from '../../src/core/systems/gameSession';
+import { SUPER_CRIT_MULTIPLIER } from '../../src/config/critConfig';
 import { LOGIC_STEP_SECONDS, MAX_LOGIC_STEPS_PER_FRAME } from '../../src/config/loopConfig';
+import { createSeededRng } from '../../src/utils/random';
+
+const rngNormal = () => 0.999999;
+const rngSuperCrit = () => 0;
 
 function currentEnemy(session: ReturnType<typeof createGameSession>) {
   return getCurrentEnemy(session.combat.stage);
@@ -10,7 +19,7 @@ function currentEnemy(session: ReturnType<typeof createGameSession>) {
 
 describe('game session', () => {
   it('starts at stage 1 with a full-health enemy, no gold and the starting knights', () => {
-    const session = createGameSession();
+    const session = createGameSession({ rng: rngNormal });
 
     expect(session.combat.stage.stageNumber).toBe(1);
     expect(currentEnemy(session).hp.eq(currentEnemy(session).maxHp)).toBe(true);
@@ -19,7 +28,7 @@ describe('game session', () => {
   });
 
   it('lets knights attack as time passes', () => {
-    const session = createGameSession();
+    const session = createGameSession({ rng: rngNormal });
     const enemy = currentEnemy(session);
     const knightDamage = getKnightDamage(session.knights.knights[0]);
 
@@ -29,8 +38,8 @@ describe('game session', () => {
   });
 
   it('gives the same result regardless of how time is split into frames', () => {
-    const oneFrame = createGameSession();
-    const manyFrames = createGameSession();
+    const oneFrame = createGameSession({ rng: rngNormal });
+    const manyFrames = createGameSession({ rng: rngNormal });
 
     advanceGameSession(oneFrame, 5.5);
     for (let i = 0; i < 330; i++) advanceGameSession(manyFrames, 1 / 60);
@@ -40,7 +49,7 @@ describe('game session', () => {
   });
 
   it('collects gold and moves to the next enemy on a kill', () => {
-    const session = createGameSession();
+    const session = createGameSession({ rng: rngNormal });
     const first = currentEnemy(session);
     const secondsToKill = first.maxHp.div(getKnightDamage(session.knights.knights[0])).toNumber();
 
@@ -55,7 +64,7 @@ describe('game session', () => {
   });
 
   it.each([NaN, -1, Infinity])('ignores an invalid frame delta of %s', (delta) => {
-    const session = createGameSession();
+    const session = createGameSession({ rng: rngNormal });
     const enemy = currentEnemy(session);
 
     expect(advanceGameSession(session, delta)).toBe(0);
@@ -63,12 +72,57 @@ describe('game session', () => {
   });
 
   it('caps logic steps per frame and sets the rest aside as offline time', () => {
-    const session = createGameSession();
+    const session = createGameSession({ rng: rngNormal });
     const capSeconds = MAX_LOGIC_STEPS_PER_FRAME * LOGIC_STEP_SECONDS;
 
     const steps = advanceGameSession(session, capSeconds + 3600);
 
     expect(steps).toBe(MAX_LOGIC_STEPS_PER_FRAME);
     expect(session.ticker.pendingOfflineSeconds).toBeCloseTo(3600, 6);
+  });
+});
+
+describe('clicking in a game session', () => {
+  it('damages the current enemy by the click damage on a normal roll', () => {
+    const session = createGameSession({ rng: rngNormal });
+    const enemy = currentEnemy(session);
+
+    const event = clickGameSession(session);
+
+    expect(event.outcome).toBe('normal');
+    expect(event.damageDealt.eq(getClickDamage(session.click))).toBe(true);
+    expect(enemy.hp.eq(enemy.maxHp.sub(getClickDamage(session.click)))).toBe(true);
+  });
+
+  it('applies crits from the injected rng', () => {
+    const session = createGameSession({ rng: rngSuperCrit });
+
+    const event = clickGameSession(session);
+
+    expect(event.outcome).toBe('superCrit');
+    expect(event.damageDealt.eq(getClickDamage(session.click).mul(SUPER_CRIT_MULTIPLIER))).toBe(
+      true
+    );
+  });
+
+  it('collects the gold when a click defeats the enemy', () => {
+    const session = createGameSession({ rng: rngNormal });
+    const first = currentEnemy(session);
+    first.hp = getClickDamage(session.click);
+
+    const event = clickGameSession(session);
+
+    expect(event.enemyDefeated).toBe(true);
+    expect(session.wallet.gold.eq(first.goldReward)).toBe(true);
+    expect(session.combat.stage.currentEnemyIndex).toBe(1);
+  });
+
+  it('is reproducible with a seeded rng', () => {
+    const outcomes = (seed: number) => {
+      const session = createGameSession({ rng: createSeededRng(seed) });
+      return Array.from({ length: 50 }, () => clickGameSession(session).outcome);
+    };
+
+    expect(outcomes(7)).toEqual(outcomes(7));
   });
 });

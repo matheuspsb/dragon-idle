@@ -1,4 +1,5 @@
 import type Phaser from 'phaser';
+import type { HitOutcome } from '../config/critConfig';
 
 const palette = {
   navy: '#1a1a2e',
@@ -6,6 +7,7 @@ const palette = {
   red: '#cc2222',
   blue: '#2255cc',
   yellow: '#ffcc00',
+  orange: '#ff7a1a',
   green: '#3fbf5f',
   white: '#ffffff',
   gray300: '#aaaaaa',
@@ -20,6 +22,7 @@ export const colors = {
   gold: palette.yellow,
   damageNormal: palette.white,
   damageCrit: palette.yellow,
+  damageSuperCrit: palette.orange,
   hpBarTrack: palette.navyLight,
   hpBarFill: palette.green,
   textPrimary: palette.white,
@@ -31,6 +34,9 @@ export const fontSizes = {
   hud: '20px',
   body: '18px',
   small: '14px',
+  damage: '22px',
+  damageCrit: '28px',
+  damageSuperCrit: '36px',
 } as const;
 
 type TextStyle = Phaser.Types.GameObjects.Text.TextStyle;
@@ -40,6 +46,22 @@ export const textStyles = {
   gold: { fontSize: fontSizes.hud, color: colors.gold, fontStyle: 'bold' },
   hpText: { fontSize: fontSizes.small, color: colors.textSecondary },
 } as const satisfies Record<string, TextStyle>;
+
+export const damageTextStyles = {
+  normal: { fontSize: fontSizes.damage, color: colors.damageNormal, fontStyle: 'bold' },
+  crit: { fontSize: fontSizes.damageCrit, color: colors.damageCrit, fontStyle: 'bold' },
+  superCrit: {
+    fontSize: fontSizes.damageSuperCrit,
+    color: colors.damageSuperCrit,
+    fontStyle: 'bold',
+  },
+} as const satisfies Record<HitOutcome, TextStyle>;
+
+export const motion = {
+  damageFloatDistance: 60,
+  damageFloatDurationMs: 700,
+  damageJitterX: 30,
+} as const;
 
 export const spacing = {
   knightGap: 120,
