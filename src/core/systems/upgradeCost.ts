@@ -18,6 +18,9 @@ export function bulkCost(
 ): Decimal {
   if (count <= 0) return new Decimal(0);
   if (costGrowth === 1) return new Decimal(baseCost).mul(count);
+  // The series formula drifts in the last digits for n = 1; the charged price
+  // must match the displayed next-level cost exactly.
+  if (count === 1) return nextCost(baseCost, costGrowth, level);
 
   const rate = new Decimal(costGrowth);
   return nextCost(baseCost, costGrowth, level).mul(rate.pow(count).sub(1)).div(rate.sub(1));
@@ -31,7 +34,7 @@ export function maxAffordable(
   currency: DecimalSource
 ): number {
   const budget = new Decimal(currency);
-  if (budget.lte(0)) return 0;
+  if (!budget.isFinite() || budget.lte(0)) return 0;
 
   let count: number;
   if (costGrowth === 1) {
