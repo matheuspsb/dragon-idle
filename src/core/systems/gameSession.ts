@@ -2,6 +2,7 @@ import type { Rng } from '../../utils/random';
 import { createCombatState, resolveHit, type CombatEvent } from './combatSystem';
 import { tickAutoDps } from './autoDpsSystem';
 import { collectGold } from './goldSystem';
+import { challengeBoss, tickBossTimer } from './bossSystem';
 import { getClickDamage } from './levelDamage';
 import {
   buyWithMode,
@@ -44,6 +45,7 @@ export function createGameSession(options: GameSessionOptions): GameSession {
   // Built once so advancing a frame doesn't allocate a new callback.
   const step = (stepSeconds: number): void => {
     collectGold(wallet, tickAutoDps(knights, combat, stepSeconds));
+    tickBossTimer(combat, stepSeconds);
   };
 
   return {
@@ -95,4 +97,8 @@ export function buyUpgrade(
   mode: PurchaseMode
 ): PurchaseResult {
   return buyWithMode(session.wallet, resolveUpgradable(session, target), mode);
+}
+
+export function challengeBossInSession(session: GameSession): boolean {
+  return challengeBoss(session.combat);
 }

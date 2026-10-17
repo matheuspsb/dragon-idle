@@ -1,11 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { buttonSizes, layout, spacing } from '../../src/ui/tokens';
 import { clickCanvas, grantGold, openGame, snapshot } from './support/devHook';
-
-const panel = layout.upgradePanel;
-const clickRow = { x: panel.x, y: panel.y + spacing.upgradeRowGap };
-const knightRow = { x: panel.x, y: panel.y + 2 * spacing.upgradeRowGap };
-const maxModeButton = { x: panel.x + buttonSizes.mode.width + spacing.modeButtonGap, y: panel.y };
+import {
+  clickUpgradeRow as clickRow,
+  knightUpgradeRow as knightRow,
+  maxModeButton,
+} from './support/ui';
 
 test.beforeEach(async ({ page }) => {
   await openGame(page);

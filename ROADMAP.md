@@ -33,7 +33,8 @@
 - [x] Phaser renderizando boss, cavaleiros, ouro (estado real do core, barra de HP, estágio)
 - [x] Clique funcional com feedback (números flutuantes por tipo de golpe, com pool de objetos)
 - [x] Compra de upgrades via UI (modos x1, x10 e Máx)
-- [ ] Progressão de boss
+- [x] Progressão de boss (timer de 30 s, farm e "Enfrentar boss")
+- [ ] Rodar simulações de balanço: no playtest de 2026-10-17 o criador chegou ao estágio 57 sem esforço (fácil demais); medir de novo com o timer de boss e ajustar
 - [ ] Save/load LocalStorage
 - [ ] Polimento básico de UX
 

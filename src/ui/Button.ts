@@ -8,6 +8,7 @@ export class Button {
   private enabled = true;
   private selected = false;
   private hovered = false;
+  private visible = true;
 
   constructor(
     scene: Phaser.Scene,
@@ -51,6 +52,15 @@ export class Button {
     } else {
       this.background.setStrokeStyle();
     }
+  }
+
+  setVisible(visible: boolean): void {
+    if (visible === this.visible) return;
+    this.visible = visible;
+    this.background.setVisible(visible);
+    this.text.setVisible(visible);
+    if (visible) this.background.setInteractive();
+    else this.background.disableInteractive();
   }
 
   private setHovered(hovered: boolean): void {

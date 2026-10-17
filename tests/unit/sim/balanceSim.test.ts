@@ -65,3 +65,13 @@ describe('runBalanceSim', () => {
     expect(() => runBalanceSim({ ...TEN_MINUTES, ...override })).toThrow(RangeError);
   });
 });
+
+describe('runBalanceSim with boss fights', () => {
+  it('counts boss failures and still progresses by farming and retrying', () => {
+    // The idle start is slow: the first boss is lost and only beaten after farming.
+    const idle = runBalanceSim({ ...TEN_MINUTES, durationSeconds: 15 * 60, clicksPerSecond: 0 });
+
+    expect(idle.bossFailures).toBeGreaterThan(0);
+    expect(idle.finalStage).toBeGreaterThan(1);
+  });
+});

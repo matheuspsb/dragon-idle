@@ -8,7 +8,11 @@ import { tickAutoDps } from '../core/systems/autoDpsSystem';
 import { collectGold } from '../core/systems/goldSystem';
 import { buyLevels } from '../core/systems/upgradeSystem';
 import { expectedHitMultiplier } from '../core/systems/critRoll';
-import { getClickDamage, levelDamage } from '../core/systems/levelDamage';
+import { getClickDamage, getKnightDamage, levelDamage } from '../core/systems/levelDamage';
+import { challengeBoss, tickBossTimer } from '../core/systems/bossSystem';
+import { BOSS_TIME_LIMIT_SECONDS } from '../config/stageConfig';
+import { shouldChallengeBoss } from './bossPolicy';
+import type { CombatState } from '../core/state/CombatState';
 import { chooseBestUpgrade, type UpgradeCandidate } from './purchasePolicy';
 
 export interface BalanceSimConfig {
@@ -30,6 +34,7 @@ export interface BalanceSimResult {
   knightLevels: number[];
   goldEarned: Decimal;
   goldSpent: Decimal;
+  bossFailures: number;
 }
 
 function validate(config: BalanceSimConfig): void {
@@ -80,8 +85,25 @@ function buyGreedily(
   }
 }
 
+function expectedDps(
+  click: ClickState,
+  knightsState: KnightsState,
+  clicksPerSecond: number
+): Decimal {
+  const clickDps = getClickDamage(click).mul(clicksPerSecond * expectedHitMultiplier());
+  return knightsState.knights.reduce(
+    (total, knight) => total.add(getKnightDamage(knight).div(knight.attackIntervalSeconds)),
+    clickDps
+  );
+}
+
+function bossHpOf(combat: CombatState): Decimal {
+  return combat.stage.enemies[combat.stage.enemies.length - 1].maxHp;
+}
+
 // Plays the real core rules with a scripted player: clicks at a fixed rate,
-// lets knights attack, and greedily buys the upgrade with the best DPS per gold.
+// lets knights attack, greedily buys the upgrade with the best DPS per gold, and
+// after failing a boss farms until its expected damage can beat it in time.
 export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
   validate(config);
   const { durationSeconds, stepSeconds, clicksPerSecond, seed } = config;
@@ -96,6 +118,7 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
   let goldEarned = new Decimal(0);
   let goldSpent = new Decimal(0);
   let clickBudget = 0;
+  let bossFailures = 0;
 
   const steps = Math.round(durationSeconds / stepSeconds);
   for (let i = 1; i <= steps; i++) {
@@ -109,7 +132,19 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
     events.push(...tickAutoDps(knightsState, combat, stepSeconds));
 
     goldEarned = goldEarned.add(collectGold(wallet, events));
+    if (tickBossTimer(combat, stepSeconds)) bossFailures += 1;
     goldSpent = goldSpent.add(buyGreedily(wallet, click, knightsState, clicksPerSecond));
+
+    if (
+      combat.mode === 'farming' &&
+      shouldChallengeBoss(
+        expectedDps(click, knightsState, clicksPerSecond),
+        bossHpOf(combat),
+        BOSS_TIME_LIMIT_SECONDS
+      )
+    ) {
+      challengeBoss(combat);
+    }
 
     const now = i * stepSeconds;
     while (stageTimeline[stageTimeline.length - 1].stage < combat.stage.stageNumber) {
@@ -127,5 +162,6 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
     knightLevels: knightsState.knights.map((knight) => knight.level),
     goldEarned,
     goldSpent,
+    bossFailures,
   };
 }

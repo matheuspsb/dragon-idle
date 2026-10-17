@@ -16,3 +16,4 @@
 | [0012](0012-sessao-de-jogo-e-render-por-mudanca.md)           | Sessão de jogo pura e render só quando o estado muda      | aceita                                 |
 | [0013](0013-clique-e-numeros-flutuantes-com-pool.md)          | Clique na sessão e números flutuantes com pool de objetos | aceita                                 |
 | [0014](0014-compra-de-upgrades-pela-ui.md)                    | Compra de upgrades pela UI com modos x1, x10 e Máx        | aceita                                 |
+| [0015](0015-timer-de-boss-com-farm.md)                        | Timer de boss com farm e "Enfrentar boss"                 | aceita                                 |

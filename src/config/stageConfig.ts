@@ -5,3 +5,4 @@ export const HP_GROWTH_PER_STAGE = 1.15;
 export const BOSS_HP_MULTIPLIER = 8;
 export const BASE_GOLD_REWARD = 1;
 export const GOLD_GROWTH_PER_STAGE = 1.15;
+export const BOSS_TIME_LIMIT_SECONDS = 30;

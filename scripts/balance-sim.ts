@@ -71,6 +71,6 @@ for (const clicksPerSecond of profiles) {
   console.log(`\n== Perfil ${label} — simulado em ${elapsed} s`);
   console.table(stageRows(result, durationSeconds));
   console.log(
-    `Estágio final: ${result.finalStage} | clique nv ${result.clickLevel} | cavaleiros nv ${result.knightLevels.join(', ')}`
+    `Estágio final: ${result.finalStage} | clique nv ${result.clickLevel} | cavaleiros nv ${result.knightLevels.join(', ')} | bosses perdidos: ${result.bossFailures}`
   );
 }

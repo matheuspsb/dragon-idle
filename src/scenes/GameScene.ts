@@ -3,6 +3,7 @@ import { getCurrentEnemy } from '../core/entities/Stage';
 import {
   advanceGameSession,
   buyUpgrade,
+  challengeBossInSession,
   clickGameSession,
   createGameSession,
   type GameSession,
@@ -13,7 +14,9 @@ import { KnightsView } from '../entities/KnightsView';
 import { GoldCounter } from '../ui/GoldCounter';
 import { StageLabel } from '../ui/StageLabel';
 import { UpgradePanel } from '../ui/UpgradePanel';
-import { layout } from '../ui/tokens';
+import { BossTimer } from '../ui/BossTimer';
+import { Button } from '../ui/Button';
+import { buttonSizes, layout } from '../ui/tokens';
 import { installDevHook } from '../debug/devHook';
 
 export class GameScene extends Phaser.Scene {
@@ -24,6 +27,8 @@ export class GameScene extends Phaser.Scene {
   private goldCounter!: GoldCounter;
   private damageNumbers!: FloatingDamageNumbers;
   private upgradePanel!: UpgradePanel;
+  private bossTimer!: BossTimer;
+  private challengeButton!: Button;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -36,6 +41,18 @@ export class GameScene extends Phaser.Scene {
     this.knightsView = new KnightsView(this, layout.knights.x, layout.knights.y);
     this.goldCounter = new GoldCounter(this, layout.gold.x, layout.gold.y);
     this.damageNumbers = new FloatingDamageNumbers(this);
+    this.bossTimer = new BossTimer(this, layout.bossTimer.x, layout.bossTimer.y);
+    this.challengeButton = new Button(
+      this,
+      layout.challengeButton.x,
+      layout.challengeButton.y,
+      buttonSizes.challenge,
+      () => {
+        challengeBossInSession(this.session);
+        this.renderSession();
+      }
+    );
+    this.challengeButton.setLabel('Enfrentar boss');
     this.enemyView.onClick(() => this.handleEnemyClick());
     this.upgradePanel = new UpgradePanel(this, layout.upgradePanel.x, layout.upgradePanel.y, {
       onBuy: (target, mode) => {
@@ -60,7 +77,9 @@ export class GameScene extends Phaser.Scene {
 
   private renderSession(): void {
     const { combat, knights, wallet } = this.session;
-    this.stageLabel.render(combat.stage);
+    this.stageLabel.render(combat);
+    this.bossTimer.render(combat.bossTimeLeftSeconds);
+    this.challengeButton.setVisible(combat.mode === 'farming');
     this.enemyView.render(getCurrentEnemy(combat.stage));
     this.knightsView.render(knights.knights);
     this.goldCounter.render(wallet.gold);

@@ -85,6 +85,14 @@ Totais por estágio: `HP(s) = 260 × 1.15^(s − 1)` e `ouro(s) = 13 × 1.15^(s 
 
 **Tempo para limpar um estágio:** `t(s) = HP(s) / DPS`.
 
+**Timer de boss** (ver [0015](decisions/0015-timer-de-boss-com-farm.md)): o boss tem 30 s. Para vencê-lo é preciso
+
+```
+DPS ≥ HP_boss(s) / 30 = 8 × 20 × 1.15^(s − 1) / 30 ≈ 5.33 × 1.15^(s − 1)
+```
+
+Se falhar, o jogador farma o estágio (só monstros, com ouro) até conseguir esse DPS e desafiar de novo.
+
 **Críticos (só no clique):** um sorteio decide o resultado. Super crítico: 1%, `× 10`. Crítico: 12%, `× 2.5`. Normal: o resto.
 
 Multiplicador médio de um clique:
@@ -146,4 +154,10 @@ Alavancas, se for preciso mover a parede de novo:
 
 Todas as variantes usam ouro ×1.15 por estágio, exceto a que muda o ouro. Leitura: no equilíbrio ou acima dele (ouro ≥ necessário) não existe parede; um pouco abaixo dele a parede só chega horas depois, o que combina com o rebirth da Fase 3.
 
-**Curva atual em 8 h** (seed 1): no ativo, estágio 200 em 28 min e 300 em 3 h, terminando no 347 (só +34 estágios entre a 4ª e a 8ª hora, ~5,5 min por estágio no 300); no idle, estágio 100 em 1h16 e 200 em 5h07, terminando no 226.
+**Com timer de boss (2026-10-17, 8 h, seed 1):** ativo chega ao estágio 50 em 4 min (igual), 300 em 4h17 (antes 3h00) e termina no 328 com 20 bosses perdidos; idle termina no 202 com 36 perdidos (antes 226).
+
+**Curva sem timer de boss, em 8 h** (seed 1): no ativo, estágio 200 em 28 min e 300 em 3 h, terminando no 347 (só +34 estágios entre a 4ª e a 8ª hora, ~5,5 min por estágio no 300); no idle, estágio 100 em 1h16 e 200 em 5h07, terminando no 226.
+
+## Observações de playtest
+
+- **2026-10-17:** o criador jogou um pouco e chegou ao **estágio 57 sem o mínimo de esforço** — está fácil demais. Bate com o sim (perfil ativo chega ao estágio 50 em ~4 min). Rodar simulações e ajustar depois que o timer de boss existir, já que ele muda a parede.

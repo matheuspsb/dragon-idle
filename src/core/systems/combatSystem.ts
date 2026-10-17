@@ -6,9 +6,14 @@ import type { Enemy, EnemyKind } from '../entities/Enemy';
 import { applyDamage, applyFlatDamage, type DamageResult } from './damage';
 import { createStage } from './stageGenerator';
 import type { CombatState } from '../state/CombatState';
+import { BOSS_TIME_LIMIT_SECONDS } from '../../config/stageConfig';
 
 export function createCombatState(startingStageNumber = 1): CombatState {
-  return { stage: createStage(startingStageNumber) };
+  return {
+    stage: createStage(startingStageNumber),
+    mode: 'progressing',
+    bossTimeLeftSeconds: null,
+  };
 }
 
 export interface CombatEvent extends DamageResult {
@@ -30,13 +35,22 @@ function finalizeHit(state: CombatState, enemy: Enemy, damageResult: DamageResul
 
   event.goldEarned = enemy.goldReward;
 
-  const isLastEnemy = state.stage.currentEnemyIndex === state.stage.enemies.length - 1;
-  if (isLastEnemy) {
+  if (enemy.kind === 'boss') {
     event.stageCleared = true;
     event.newStageNumber = state.stage.stageNumber + 1;
     state.stage = createStage(event.newStageNumber);
+    state.mode = 'progressing';
+    state.bossTimeLeftSeconds = null;
+    return event;
+  }
+
+  const nextIndex = state.stage.currentEnemyIndex + 1;
+  const nextIsBoss = state.stage.enemies[nextIndex]?.kind === 'boss';
+  if (nextIsBoss && state.mode === 'farming') {
+    state.stage = createStage(state.stage.stageNumber);
   } else {
-    state.stage.currentEnemyIndex += 1;
+    state.stage.currentEnemyIndex = nextIndex;
+    if (nextIsBoss) state.bossTimeLeftSeconds = BOSS_TIME_LIMIT_SECONDS;
   }
 
   return event;

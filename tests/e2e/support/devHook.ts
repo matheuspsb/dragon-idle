@@ -23,3 +23,10 @@ export function grantGold(page: Page, amount: number): Promise<void> {
 export async function clickCanvas(page: Page, at: { x: number; y: number }): Promise<void> {
   await page.locator('canvas').click({ position: at });
 }
+
+export function skipTime(page: Page, seconds: number): Promise<void> {
+  return page.evaluate(
+    ([key, value]) => (window as unknown as Record<string, DevHook>)[key].skipTime(value),
+    [DEV_HOOK_KEY, seconds] as const
+  );
+}

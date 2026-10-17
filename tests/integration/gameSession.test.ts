@@ -5,11 +5,14 @@ import {
   advanceGameSession,
   clickGameSession,
   buyUpgrade,
+  challengeBossInSession,
   createGameSession,
   quoteUpgrade,
 } from '../../src/core/systems/gameSession';
 import { SUPER_CRIT_MULTIPLIER } from '../../src/config/critConfig';
 import { LOGIC_STEP_SECONDS, MAX_LOGIC_STEPS_PER_FRAME } from '../../src/config/loopConfig';
+import { BOSS_TIME_LIMIT_SECONDS } from '../../src/config/stageConfig';
+import { resolveAutoHit } from '../../src/core/systems/combatSystem';
 import { createSeededRng } from '../../src/utils/random';
 import { Decimal } from '../../src/utils/Decimal';
 import { addGold } from '../../src/core/state/WalletState';
@@ -168,5 +171,47 @@ describe('buying upgrades in a game session', () => {
     const session = createGameSession({ rng: rngNormal });
 
     expect(() => buyUpgrade(session, { kind: 'knight', index }, 'x1')).toThrow(RangeError);
+  });
+});
+
+describe('boss fights in a game session', () => {
+  // Advance in 1 s frames: a single huge frame would hit the per-frame step cap.
+  function playFor(session: ReturnType<typeof createGameSession>, seconds: number): void {
+    for (let elapsed = 0; elapsed < seconds; elapsed++) advanceGameSession(session, 1);
+  }
+
+  function reachBoss(session: ReturnType<typeof createGameSession>): void {
+    while (currentEnemy(session).kind !== 'boss') {
+      resolveAutoHit(session.combat, currentEnemy(session).hp);
+    }
+  }
+
+  it('fails the boss when the starting knight cannot kill it in time, then farms', () => {
+    const session = createGameSession({ rng: rngNormal });
+    reachBoss(session);
+
+    playFor(session, BOSS_TIME_LIMIT_SECONDS + 1);
+
+    expect(session.combat.mode).toBe('farming');
+    expect(currentEnemy(session).kind).toBe('monster');
+  });
+
+  it('lets the player challenge the boss again after failing', () => {
+    const session = createGameSession({ rng: rngNormal });
+    reachBoss(session);
+    playFor(session, BOSS_TIME_LIMIT_SECONDS + 1);
+
+    expect(challengeBossInSession(session)).toBe(true);
+    expect(currentEnemy(session).kind).toBe('boss');
+    expect(session.combat.bossTimeLeftSeconds).toBe(BOSS_TIME_LIMIT_SECONDS);
+  });
+
+  it('counts the boss timer down with game time', () => {
+    const session = createGameSession({ rng: rngNormal });
+    reachBoss(session);
+
+    playFor(session, 10);
+
+    expect(session.combat.bossTimeLeftSeconds).toBeCloseTo(BOSS_TIME_LIMIT_SECONDS - 10, 6);
   });
 });

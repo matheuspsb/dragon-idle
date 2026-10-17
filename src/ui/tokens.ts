@@ -27,6 +27,7 @@ export const colors = {
   damageSuperCrit: palette.orange,
   hpBarTrack: palette.navyLight,
   hpBarFill: palette.green,
+  bossTimerFill: palette.red,
   textPrimary: palette.white,
   textSecondary: palette.gray300,
   textMuted: palette.gray400,
@@ -50,6 +51,7 @@ type TextStyle = Phaser.Types.GameObjects.Text.TextStyle;
 export const textStyles = {
   hud: { fontSize: fontSizes.hud, color: colors.textPrimary, fontStyle: 'bold' },
   gold: { fontSize: fontSizes.hud, color: colors.gold, fontStyle: 'bold' },
+  bossTimer: { fontSize: fontSizes.small, color: colors.textPrimary },
   hpText: { fontSize: fontSizes.small, color: colors.textSecondary },
   button: { fontSize: fontSizes.small, color: colors.textPrimary, align: 'center' },
   buttonDisabled: { fontSize: fontSizes.small, color: colors.textMuted, align: 'center' },
@@ -85,11 +87,13 @@ export const placeholders = {
   knight: { width: 40, height: 60, color: colors.knight },
   gold: { radius: 14, color: colors.gold },
   hpBar: { width: 220, height: 12 },
+  bossTimerBar: { width: 220, height: 6 },
 } as const;
 
 export const buttonSizes = {
   upgrade: { width: 250, height: 50 },
   mode: { width: 78, height: 30 },
+  challenge: { width: 200, height: 36 },
   selectedBorder: 2,
 } as const;
 
@@ -99,6 +103,8 @@ export const layout = {
   knights: { x: 400, y: 380 },
   gold: { x: 40, y: 540 },
   upgradePanel: { x: 650, y: 430 },
+  bossTimer: { x: 400, y: 80 },
+  challengeButton: { x: 400, y: 460 },
 } as const;
 
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;
