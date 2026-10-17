@@ -34,7 +34,8 @@
 - [x] Clique funcional com feedback (números flutuantes por tipo de golpe, com pool de objetos)
 - [x] Compra de upgrades via UI (modos x1, x10 e Máx)
 - [x] Progressão de boss (timer de 30 s, farm e "Enfrentar boss")
-- [ ] Rodar simulações de balanço: no playtest de 2026-10-17 o criador chegou ao estágio 57 sem esforço (fácil demais); medir de novo com o timer de boss e ajustar
+- [ ] Rodar simulações de balanço: no playtest de 2026-10-17 o criador chegou ao estágio 57 sem esforço (fácil demais); medir de novo com o timer de boss e ajustar. No mesmo playtest a barra de 30 s do boss demorou a aparecer — provavelmente porque o boss morria quase na hora; confirmar com o sim
+- [ ] Tirar o crítico do jogo base (pedido do criador em 2026-10-17): hoje o clique crita (12% ×2.5, 1% ×10). A chance de crítico deve virar estado do clique começando em 0%, mantendo multiplicadores e estilos de número prontos para o upgrade
 - [ ] Save/load LocalStorage
 - [ ] Polimento básico de UX
 
@@ -46,6 +47,7 @@
 
 - [ ] Rebirth implementado
 - [ ] Almas Ancestrais e upgrades permanentes
+- [ ] Upgrade de crítico (chance e multiplicador) — o crítico só existe via upgrade; decidir se é comprado com ouro ou com almas
 - [ ] Cálculo de offline rewards + modal de boas-vindas (consumir `pendingOfflineSeconds` do ticker, de forma analítica)
 - [ ] Sistema de unlocks por feature flag
 
@@ -84,3 +86,78 @@
 - [ ] Steam release
 - [ ] Patches de bugs nas primeiras 2 semanas
 - [ ] Decidir baseado em vendas: DLC? Sequência? Próximo projeto?
+
+---
+
+## Brainstorm — ideias para o futuro
+
+> Ideias soltas, **sem prioridade nem compromisso**. Quando uma ideia virar plano, ela sai daqui e entra numa fase acima (e ganha registro em `docs/decisions/` se for estrutural). Antes de entrar, passar pelo balance-sim quando mexer em números. 🌐 = exige servidor/online, o que hoje o projeto não tem (decisão grande, avaliar junto com Steamworks).
+
+### Upgrades compráveis
+
+**Com ouro (dentro da run, zeram no rebirth)**
+
+- Crítico: chance, multiplicador e super crítico (já previsto na Fase 3)
+- Dano de clique escalando com o DPS dos cavaleiros (ex: clique ganha +1% do DPS total), para o clique não ficar inútil no idle
+- Velocidade de ataque dos cavaleiros (reduz o intervalo entre golpes)
+- Novos cavaleiros: desbloquear o 2º, 3º, 4º... cada um com custo e dano base próprios
+- Multiplicador global de dano
+- Dano extra contra boss
+- Tempo extra contra boss (+5 s no timer)
+- Ouro extra por kill e chance de "baú" com ouro bônus
+- Desconto no custo dos upgrades
+- Auto-clique (cliques automáticos por segundo)
+- Habilidades ativas com recarga: Fúria (×2 de dano por 30 s), Chuva de ouro, Golpe do dragão (dano em área), Congelar o timer do boss
+
+**Com almas (permanentes, entre runs)**
+
+- Bônus permanente de dano e de ouro por alma acumulada
+- Começar a run num estágio mais alto
+- Mais almas por rebirth
+- Ganho offline maior e limite de tempo offline maior
+- Cavaleiros começam a run com nível mínimo
+- Desbloqueio de automações: auto-compra de upgrades, auto-enfrentar boss
+- Upgrades de crítico permanentes (se o crítico for de alma)
+
+### Mecânicas que podem virar roadmap
+
+**Progressão e conteúdo**
+
+- Zonas/mapas temáticos (floresta, montanha, vulcão, gelo), cada um com inimigos, cores e bônus próprios
+- Mapa de bosses: escolher qual dragão enfrentar, cada um com uma mecânica (escudo que absorve clique, regeneração, fúria ao ficar com pouco HP, imune a cavaleiros por alguns segundos)
+- Bosses lendários ou semanais com recompensa rara
+- Fraquezas elementais (fogo, gelo, raio) entre cavaleiros e dragões
+- Eventos sazonais com bosses e recompensas temáticas
+
+**Heróis e cavaleiros**
+
+- Heróis com classe e identidade (tanque, mago, arqueiro, paladino) e uma habilidade passiva cada
+- Sinergias de grupo: bônus por combinação de classes
+- Equipamentos (armas, armaduras, anéis) com raridade, encantamento e forja
+- Árvore de talentos por herói
+- Pets e montarias (filhotes de dragão aliados que ajudam no combate)
+- Recrutamento de heróis por sorteio justo, sem dinheiro real
+
+**Meta-progressão**
+
+- Rebirth em camadas (rebirth → ascensão → transcendência), cada camada com sua moeda
+- Artefatos/relíquias permanentes com efeitos únicos
+- Conquistas com bônus pequenos (integram com as conquistas da Steam)
+- Desafios: runs com regras especiais (sem clique, só um cavaleiro, tempo limitado) que dão recompensas permanentes
+- Bestiário: cada tipo de dragão derrotado dá um bônus de coleção
+
+**Social e online 🌐**
+
+- Guildas com bônus coletivo e chat
+- Raids: boss gigante com HP compartilhado pela guilda ou pela comunidade, com recompensa por contribuição
+- Rankings (estágio máximo, DPS, velocidade de rebirth)
+- Torneios e temporadas competitivas
+- Troca de itens entre jogadores
+
+**Qualidade de vida**
+
+- Estatísticas da run (DPS, ouro por segundo, tempo por estágio, bosses perdidos)
+- Notação numérica configurável (sufixos, científica)
+- Tela de boas-vindas offline detalhada (o que foi ganho enquanto estava fora)
+- Configurações de áudio, números flutuantes e efeitos
+- Cloud save (já previsto na Fase 5)
