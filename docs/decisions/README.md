@@ -15,3 +15,4 @@
 | [0011](0011-milestone-x4-para-adiar-a-parede.md)              | Milestone ×4 a cada 25 níveis para adiar a parede         | aceita                                 |
 | [0012](0012-sessao-de-jogo-e-render-por-mudanca.md)           | Sessão de jogo pura e render só quando o estado muda      | aceita                                 |
 | [0013](0013-clique-e-numeros-flutuantes-com-pool.md)          | Clique na sessão e números flutuantes com pool de objetos | aceita                                 |
+| [0014](0014-compra-de-upgrades-pela-ui.md)                    | Compra de upgrades pela UI com modos x1, x10 e Máx        | aceita                                 |

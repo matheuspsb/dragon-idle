@@ -4,11 +4,15 @@ import { getClickDamage, getKnightDamage } from '../../src/core/systems/levelDam
 import {
   advanceGameSession,
   clickGameSession,
+  buyUpgrade,
   createGameSession,
+  quoteUpgrade,
 } from '../../src/core/systems/gameSession';
 import { SUPER_CRIT_MULTIPLIER } from '../../src/config/critConfig';
 import { LOGIC_STEP_SECONDS, MAX_LOGIC_STEPS_PER_FRAME } from '../../src/config/loopConfig';
 import { createSeededRng } from '../../src/utils/random';
+import { Decimal } from '../../src/utils/Decimal';
+import { addGold } from '../../src/core/state/WalletState';
 
 const rngNormal = () => 0.999999;
 const rngSuperCrit = () => 0;
@@ -124,5 +128,45 @@ describe('clicking in a game session', () => {
     };
 
     expect(outcomes(7)).toEqual(outcomes(7));
+  });
+});
+
+describe('buying upgrades in a game session', () => {
+  it('raises the click level, charges gold and increases click damage', () => {
+    const session = createGameSession({ rng: rngNormal });
+    addGold(session.wallet, 1000);
+    const damageBefore = getClickDamage(session.click);
+    const quote = quoteUpgrade(session, { kind: 'click' }, 'x1');
+
+    const result = buyUpgrade(session, { kind: 'click' }, 'x1');
+
+    expect(result.levelsBought).toBe(1);
+    expect(session.wallet.gold.eq(new Decimal(1000).sub(quote.cost))).toBe(true);
+    expect(getClickDamage(session.click).gt(damageBefore)).toBe(true);
+  });
+
+  it('raises a knight level and its damage', () => {
+    const session = createGameSession({ rng: rngNormal });
+    addGold(session.wallet, 1000);
+    const knight = session.knights.knights[0];
+    const damageBefore = getKnightDamage(knight);
+
+    buyUpgrade(session, { kind: 'knight', index: 0 }, 'x10');
+
+    expect(knight.level).toBe(11);
+    expect(getKnightDamage(knight).gt(damageBefore)).toBe(true);
+  });
+
+  it('buys nothing without enough gold', () => {
+    const session = createGameSession({ rng: rngNormal });
+
+    expect(buyUpgrade(session, { kind: 'click' }, 'max').levelsBought).toBe(0);
+    expect(session.click.level).toBe(1);
+  });
+
+  it.each([-1, 1, 0.5])('rejects an unknown knight index %s', (index) => {
+    const session = createGameSession({ rng: rngNormal });
+
+    expect(() => buyUpgrade(session, { kind: 'knight', index }, 'x1')).toThrow(RangeError);
   });
 });

@@ -32,7 +32,7 @@
 - [x] Base do loop: tick de lógica com passo fixo e tokens do design system com placeholders
 - [x] Phaser renderizando boss, cavaleiros, ouro (estado real do core, barra de HP, estágio)
 - [x] Clique funcional com feedback (números flutuantes por tipo de golpe, com pool de objetos)
-- [ ] Compra de upgrades via UI
+- [x] Compra de upgrades via UI (modos x1, x10 e Máx)
 - [ ] Progressão de boss
 - [ ] Save/load LocalStorage
 - [ ] Polimento básico de UX

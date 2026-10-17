@@ -4,6 +4,8 @@ import type { HitOutcome } from '../config/critConfig';
 const palette = {
   navy: '#1a1a2e',
   navyLight: '#2a2a44',
+  slate: '#3a3a5c',
+  slateLight: '#4c4c78',
   red: '#cc2222',
   blue: '#2255cc',
   yellow: '#ffcc00',
@@ -28,6 +30,10 @@ export const colors = {
   textPrimary: palette.white,
   textSecondary: palette.gray300,
   textMuted: palette.gray400,
+  buttonFill: palette.slate,
+  buttonFillHover: palette.slateLight,
+  buttonFillDisabled: palette.navyLight,
+  buttonBorderSelected: palette.yellow,
 } as const;
 
 export const fontSizes = {
@@ -45,6 +51,8 @@ export const textStyles = {
   hud: { fontSize: fontSizes.hud, color: colors.textPrimary, fontStyle: 'bold' },
   gold: { fontSize: fontSizes.hud, color: colors.gold, fontStyle: 'bold' },
   hpText: { fontSize: fontSizes.small, color: colors.textSecondary },
+  button: { fontSize: fontSizes.small, color: colors.textPrimary, align: 'center' },
+  buttonDisabled: { fontSize: fontSizes.small, color: colors.textMuted, align: 'center' },
 } as const satisfies Record<string, TextStyle>;
 
 export const damageTextStyles = {
@@ -67,6 +75,8 @@ export const spacing = {
   knightGap: 120,
   hpBarOffset: 16,
   goldIconGap: 12,
+  upgradeRowGap: 60,
+  modeButtonGap: 8,
 } as const;
 
 export const placeholders = {
@@ -77,11 +87,18 @@ export const placeholders = {
   hpBar: { width: 220, height: 12 },
 } as const;
 
+export const buttonSizes = {
+  upgrade: { width: 250, height: 50 },
+  mode: { width: 78, height: 30 },
+  selectedBorder: 2,
+} as const;
+
 export const layout = {
   stageLabel: { x: 400, y: 40 },
   enemy: { x: 400, y: 190 },
   knights: { x: 400, y: 380 },
   gold: { x: 40, y: 540 },
+  upgradePanel: { x: 650, y: 430 },
 } as const;
 
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;

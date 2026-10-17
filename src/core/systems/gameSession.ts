@@ -3,6 +3,14 @@ import { createCombatState, resolveHit, type CombatEvent } from './combatSystem'
 import { tickAutoDps } from './autoDpsSystem';
 import { collectGold } from './goldSystem';
 import { getClickDamage } from './levelDamage';
+import {
+  buyWithMode,
+  quotePurchase,
+  type PurchaseMode,
+  type PurchaseQuote,
+  type PurchaseResult,
+} from './upgradeSystem';
+import type { Knight } from '../entities/Knight';
 import type { CombatState } from '../state/CombatState';
 import { createKnightsState, type KnightsState } from '../state/KnightsState';
 import { createClickState, type ClickState } from '../state/ClickState';
@@ -57,4 +65,34 @@ export function clickGameSession(session: GameSession): CombatEvent {
   const event = resolveHit(session.combat, getClickDamage(session.click), session.rng);
   collectGold(session.wallet, [event]);
   return event;
+}
+
+export type UpgradeTarget = { kind: 'click' } | { kind: 'knight'; index: number };
+
+export function resolveUpgradable(
+  session: GameSession,
+  target: UpgradeTarget
+): ClickState | Knight {
+  if (target.kind === 'click') return session.click;
+  const knight = session.knights.knights[target.index];
+  if (!Number.isInteger(target.index) || !knight) {
+    throw new RangeError(`Unknown knight index: ${target.index}`);
+  }
+  return knight;
+}
+
+export function quoteUpgrade(
+  session: GameSession,
+  target: UpgradeTarget,
+  mode: PurchaseMode
+): PurchaseQuote {
+  return quotePurchase(resolveUpgradable(session, target), mode, session.wallet.gold);
+}
+
+export function buyUpgrade(
+  session: GameSession,
+  target: UpgradeTarget,
+  mode: PurchaseMode
+): PurchaseResult {
+  return buyWithMode(session.wallet, resolveUpgradable(session, target), mode);
 }

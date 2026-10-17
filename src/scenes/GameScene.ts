@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { getCurrentEnemy } from '../core/entities/Stage';
 import {
   advanceGameSession,
+  buyUpgrade,
   clickGameSession,
   createGameSession,
   type GameSession,
@@ -11,6 +12,7 @@ import { FloatingDamageNumbers } from '../entities/FloatingDamageNumbers';
 import { KnightsView } from '../entities/KnightsView';
 import { GoldCounter } from '../ui/GoldCounter';
 import { StageLabel } from '../ui/StageLabel';
+import { UpgradePanel } from '../ui/UpgradePanel';
 import { layout } from '../ui/tokens';
 import { installDevHook } from '../debug/devHook';
 
@@ -21,6 +23,7 @@ export class GameScene extends Phaser.Scene {
   private knightsView!: KnightsView;
   private goldCounter!: GoldCounter;
   private damageNumbers!: FloatingDamageNumbers;
+  private upgradePanel!: UpgradePanel;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -34,6 +37,12 @@ export class GameScene extends Phaser.Scene {
     this.goldCounter = new GoldCounter(this, layout.gold.x, layout.gold.y);
     this.damageNumbers = new FloatingDamageNumbers(this);
     this.enemyView.onClick(() => this.handleEnemyClick());
+    this.upgradePanel = new UpgradePanel(this, layout.upgradePanel.x, layout.upgradePanel.y, {
+      onBuy: (target, mode) => {
+        buyUpgrade(this.session, target, mode);
+        this.renderSession();
+      },
+    });
     installDevHook(this.session);
     this.renderSession();
   }
@@ -55,5 +64,6 @@ export class GameScene extends Phaser.Scene {
     this.enemyView.render(getCurrentEnemy(combat.stage));
     this.knightsView.render(knights.knights);
     this.goldCounter.render(wallet.gold);
+    this.upgradePanel.render(this.session);
   }
 }
