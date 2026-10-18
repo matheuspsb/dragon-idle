@@ -1,7 +1,8 @@
 import { Decimal } from '../../utils/Decimal';
-import { createEnemy, type Enemy, type EnemyKind } from '../entities/Enemy';
+import { createEnemy, type Enemy } from '../entities/Enemy';
 import type { Stage } from '../entities/Stage';
 import {
+  BOSS_GOLD_MULTIPLIER,
   BOSS_HP_MULTIPLIER,
   FIRST_MONSTER_HP,
   GOLD_GROWTH_PER_STAGE,
@@ -15,8 +16,8 @@ import {
 // monster in a zone is a fixed factor tougher than the previous one.
 const MONSTER_HP_RAMP = (LAST_MONSTER_HP / FIRST_MONSTER_HP) ** (1 / (MONSTERS_PER_STAGE - 1));
 
-function enemyOf(kind: EnemyKind, hp: Decimal, goldPerHp: Decimal): Enemy {
-  return createEnemy({ kind, hp, goldReward: hp.mul(goldPerHp) });
+function monsterOf(hp: Decimal, goldPerHp: Decimal): Enemy {
+  return createEnemy({ kind: 'monster', hp, goldReward: hp.mul(goldPerHp) });
 }
 
 export function createStage(stageNumber: number): Stage {
@@ -32,10 +33,16 @@ export function createStage(stageNumber: number): Stage {
 
   const enemies: Enemy[] = [];
   for (let i = 0; i < MONSTERS_PER_STAGE; i++) {
-    enemies.push(enemyOf('monster', firstHp.mul(MONSTER_HP_RAMP ** i), goldPerHp));
+    enemies.push(monsterOf(firstHp.mul(MONSTER_HP_RAMP ** i), goldPerHp));
   }
-  const lastMonsterHp = enemies[MONSTERS_PER_STAGE - 1].maxHp;
-  enemies.push(enemyOf('boss', lastMonsterHp.mul(BOSS_HP_MULTIPLIER), goldPerHp));
+  const lastMonster = enemies[MONSTERS_PER_STAGE - 1];
+  enemies.push(
+    createEnemy({
+      kind: 'boss',
+      hp: lastMonster.maxHp.mul(BOSS_HP_MULTIPLIER),
+      goldReward: lastMonster.goldReward.mul(BOSS_GOLD_MULTIPLIER),
+    })
+  );
 
   return { stageNumber, enemies, currentEnemyIndex: 0 };
 }

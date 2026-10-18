@@ -36,6 +36,7 @@
 - [x] Progressão de boss (timer de 30 s, farm e "Enfrentar boss")
 - [x] Simulações de balanço do "fácil demais" (playtest de 2026-10-17): HP inicial ×3 e crescimento ×1.18 por estágio (ver `docs/decisions/0016`); o sim agora mede a 1ª derrota de boss e um perfil casual
 - [x] Zona com 9 monstros em rampa de HP (10 → 100), boss de 1k e ouro proporcional ao HP, depois do playtest "muito travado" (ver `docs/decisions/0017`)
+- [x] Pós-boss rápido demais (playtest: estágio 4 em 10 s, boss morrendo em 3 s): boss paga 2× o último monstro e 0.05 de ouro por HP; o sim mede o tempo de cada boss (ver `docs/decisions/0019`)
 - [x] Tirar o crítico do jogo base: a chance vira estado do clique começando em 0% (ver `docs/decisions/0018`)
 - [ ] Save/load LocalStorage
 - [ ] Polimento básico de UX

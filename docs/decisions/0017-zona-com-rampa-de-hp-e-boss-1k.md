@@ -1,7 +1,7 @@
 # 0017 — Zona com 9 monstros em rampa de HP, boss de 1k e ouro por HP
 
 - **Data:** 2026-10-17
-- **Status:** aceita (substitui 0016 e a estrutura de estágio de 0004: 5 monstros iguais + boss ×8)
+- **Status:** aceita (substitui 0016 e a estrutura de estágio de 0004); o ouro (por HP e do boss) foi ajustado por 0019
 
 ## Contexto
 

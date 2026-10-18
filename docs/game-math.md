@@ -86,15 +86,16 @@ HP_boss(s)       = 10 × HP_monstro(s, 9) = 1000 × 1.20^(s − 1)
 
 Zona 1: 10 → 13 → 18 → 24 → 32 → 42 → 56 → 75 → 100, boss 1.000. Isso dá um ritmo em "dente de serra": kills rápidos no começo da zona, tensão crescendo até o boss e alívio ao entrar na zona seguinte.
 
-**Ouro** — proporcional ao HP dentro da zona, mas crescendo menos que o HP entre zonas:
+**Ouro** — proporcional ao HP para os monstros, crescendo menos que o HP entre zonas; o boss paga à parte (ver [0019](decisions/0019-ouro-do-boss-e-ouro-por-hp.md)):
 
 ```
-ouro(s, i) = HP(s, i) × 0.2 × (1.15 / 1.20)^(s − 1)
+ouro_monstro(s, i) = HP(s, i) × 0.05 × (1.15 / 1.20)^(s − 1)
+ouro_boss(s)       = 2 × ouro_monstro(s, 9)
 ```
 
-Ou seja, o ouro total de uma zona cresce ×1.15 enquanto o HP cresce ×1.20. Essa diferença é a barreira entre zonas; dentro da zona, inimigo mais difícil paga mais.
+Ou seja, o ouro total de uma zona cresce ×1.15 enquanto o HP cresce ×1.20. Essa diferença é a barreira entre zonas; dentro da zona, inimigo mais difícil paga mais. O boss paga só 2× o último monstro: pagar pelo HP inteiro dele (10×) fazia um único kill financiar várias zonas de uma vez.
 
-Totais da zona 1: HP ≈ 1.370 (370 dos monstros + 1.000 do boss), ouro ≈ 274.
+Totais da zona 1: HP ≈ 1.370 (370 dos monstros + 1.000 do boss), ouro ≈ 28,5 (18,5 dos monstros + 10 do boss).
 
 **Tempo para limpar uma zona:** `t(s) = HP_total(s) / DPS`.
 
@@ -177,4 +178,8 @@ Todas as variantes usam ouro ×1.15 por estágio, exceto a que muda o ouro. Leit
 
 - **2026-10-17 (depois de 0016):** o criador achou o jogo **muito travado** e pediu outra mecânica: 9 monstros até o boss, com a vida subindo de 10 (1/10) até ~100 (9/10), boss de ~1k, e sem crítico padrão. Aplicado em [0017](decisions/0017-zona-com-rampa-de-hp-e-boss-1k.md) e [0018](decisions/0018-critico-so-por-upgrade.md).
 
-**Curva atual (0017), 2026-10-17, 8 h, seed 1, sem crítico:** ativo (5 cliques/s) chega à zona 10 em 1m09, 50 em 4m18 e 100 em 1h07, terminando na 130 (1ª derrota de boss com 11 min); 2 cliques/s chega à 50 em 11 min e 100 em 2h30, final 117; idle chega à 50 em 47 min, final 89. A varredura completa está em [0017](decisions/0017-zona-com-rampa-de-hp-e-boss-1k.md).
+**Curva de 0017 (ouro substituído por 0019), 2026-10-17, 8 h, seed 1, sem crítico:** ativo (5 cliques/s) chega à zona 10 em 1m09, 50 em 4m18 e 100 em 1h07, terminando na 130 (1ª derrota de boss com 11 min); 2 cliques/s chega à 50 em 11 min e 100 em 2h30, final 117; idle chega à 50 em 47 min, final 89. A varredura completa está em [0017](decisions/0017-zona-com-rampa-de-hp-e-boss-1k.md).
+
+- **2026-10-17 (depois de 0017):** a primeira fase demorou, mas com o ouro do primeiro boss o criador chegou ao **estágio 4 em 10 s**, um clique matava qualquer inimigo e os bosses morriam em ~3 s. O sim já mostrava isso e tinha sido lido errado; agora mede o tempo de cada boss. Resolvido em [0019](decisions/0019-ouro-do-boss-e-ouro-por-hp.md): boss paga 2× o último monstro e 0.05 de ouro por HP.
+
+**Curva atual (0019), 2026-10-17, 8 h, seed 1, sem crítico:** 5 cliques/s chega à zona 10 em 5m13, 50 em 25m36 e 100 em ~5h, com o boss levando 21,5 s (zonas 2–10), 13,3 s (11–30) e 15,7 s (31–60); 2 cliques/s chega à 10 em 10m38 e à 50 em 50 min, boss 14–19 s; idle chega à 50 em 3h35. Ao avaliar balanço, olhar a mediana do tempo de boss (`npm run sim`) junto com o tempo até cada zona.

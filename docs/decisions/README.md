@@ -18,5 +18,6 @@
 | [0014](0014-compra-de-upgrades-pela-ui.md)                    | Compra de upgrades pela UI com modos x1, x10 e Máx           | aceita                                                             |
 | [0015](0015-timer-de-boss-com-farm.md)                        | Timer de boss com farm e "Enfrentar boss"                    | aceita                                                             |
 | [0016](0016-hp-dos-monstros-x3-e-crescimento-1-18.md)         | HP dos monstros ×3 e crescimento de ×1.18 por estágio        | substituída por 0017                                               |
-| [0017](0017-zona-com-rampa-de-hp-e-boss-1k.md)                | Zona com 9 monstros em rampa de HP, boss de 1k e ouro por HP | aceita                                                             |
+| [0017](0017-zona-com-rampa-de-hp-e-boss-1k.md)                | Zona com 9 monstros em rampa de HP, boss de 1k e ouro por HP | aceita; ouro ajustado por 0019                                     |
 | [0018](0018-critico-so-por-upgrade.md)                        | Crítico só por upgrade (fora do jogo base)                   | aceita                                                             |
+| [0019](0019-ouro-do-boss-e-ouro-por-hp.md)                    | Ouro do boss separado do HP e ouro por HP menor              | aceita                                                             |

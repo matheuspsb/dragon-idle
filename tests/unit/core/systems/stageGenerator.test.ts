@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  BOSS_GOLD_MULTIPLIER,
   BOSS_HP_MULTIPLIER,
   FIRST_MONSTER_HP,
   GOLD_GROWTH_PER_STAGE,
@@ -52,18 +53,31 @@ describe('createStage', () => {
     zone4.forEach((hp, i) => expect(hp / zone1[i]).toBeCloseTo(HP_GROWTH_PER_STAGE ** 3, 9));
   });
 
-  it('pays gold proportional to each enemy HP within zone 1', () => {
-    for (const enemy of createStage(1).enemies) {
+  it('pays gold proportional to each monster HP within zone 1', () => {
+    for (const enemy of createStage(1).enemies.slice(0, MONSTERS_PER_STAGE)) {
       expect(enemy.goldReward.toNumber()).toBeCloseTo(enemy.hp.toNumber() * GOLD_PER_HP, 6);
     }
   });
 
-  it('keeps gold proportional to HP inside any zone', () => {
-    const [first, ...rest] = createStage(7).enemies;
+  it('keeps monster gold proportional to HP inside any zone', () => {
+    const [first, ...rest] = createStage(7).enemies.slice(0, MONSTERS_PER_STAGE);
     const goldPerHp = first.goldReward.div(first.hp).toNumber();
 
     for (const enemy of rest) {
       expect(enemy.goldReward.div(enemy.hp).toNumber()).toBeCloseTo(goldPerHp, 9);
+    }
+  });
+
+  it('pays the boss BOSS_GOLD_MULTIPLIER times the gold of the last monster, apart from its HP', () => {
+    for (const stageNumber of [1, 9]) {
+      const enemies = createStage(stageNumber).enemies;
+      const lastMonster = enemies[MONSTERS_PER_STAGE - 1];
+      const boss = enemies[MONSTERS_PER_STAGE];
+
+      expect(boss.goldReward.div(lastMonster.goldReward).toNumber()).toBeCloseTo(
+        BOSS_GOLD_MULTIPLIER,
+        9
+      );
     }
   });
 
