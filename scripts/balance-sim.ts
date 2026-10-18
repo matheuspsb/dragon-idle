@@ -66,8 +66,7 @@ for (const clicksPerSecond of profiles) {
   const result = runBalanceSim({ durationSeconds, stepSeconds, clicksPerSecond, seed });
   const elapsed = ((performance.now() - started) / 1000).toFixed(1);
 
-  const label =
-    clicksPerSecond === 0 ? 'idle (sem clique)' : `ativo (${clicksPerSecond} cliques/s)`;
+  const label = clicksPerSecond === 0 ? 'idle (sem clique)' : `${clicksPerSecond} cliques/s`;
   console.log(`\n== Perfil ${label} — simulado em ${elapsed} s`);
   console.table(stageRows(result, durationSeconds));
   console.log(

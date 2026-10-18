@@ -4,8 +4,8 @@ import { layout } from '../../src/ui/tokens';
 import { clickCanvas, grantGold, openGame, skipTime, snapshot } from './support/devHook';
 import { clickUpgradeRow, maxModeButton } from './support/ui';
 
-// Enough click damage (~112, past the level-25 milestone) to one-shot each
-// monster (60 HP) but not the boss (480 HP).
+// Enough click damage (~112, past the level-25 milestone) to one-shot every
+// zone-1 monster (10 up to 100 HP) but not the boss (1k HP).
 async function reachBoss(page: Page): Promise<void> {
   await grantGold(page, 400);
   await clickCanvas(page, maxModeButton);

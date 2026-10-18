@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { createKnight } from '../../../../src/core/entities/Knight';
 import { createCombatState } from '../../../../src/core/systems/combatSystem';
 import { getCurrentEnemy } from '../../../../src/core/entities/Stage';
-import { BASE_MONSTER_HP } from '../../../../src/config/stageConfig';
 import { tickAutoDps } from '../../../../src/core/systems/autoDpsSystem';
 
 describe('tickAutoDps', () => {
@@ -65,13 +64,12 @@ describe('tickAutoDps', () => {
 
   it('reflects kills and stage clears produced mid-catch-up, in order', () => {
     const knightsState = {
-      knights: [createKnight({ damagePerHit: BASE_MONSTER_HP, attackIntervalSeconds: 1 })],
+      knights: [createKnight({ damagePerHit: 1e6, attackIntervalSeconds: 1 })],
     };
     const combatState = createCombatState(1);
     const firstEnemy = getCurrentEnemy(combatState.stage);
 
-    // Every monster in a stage shares the same hp, so one hit per second
-    // dealing exactly BASE_MONSTER_HP kills one monster per attack.
+    // Each hit is far stronger than any early monster, so every attack kills one.
     const events = tickAutoDps(knightsState, combatState, 3);
 
     expect(events).toHaveLength(3);

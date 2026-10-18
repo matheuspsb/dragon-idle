@@ -1,7 +1,7 @@
 # 0016 — HP dos monstros ×3 e crescimento de ×1.18 por estágio
 
 - **Data:** 2026-10-17
-- **Status:** aceita (substitui a curva de HP de 0004: base 20 e crescimento ×1.15)
+- **Status:** substituída por 0017
 
 ## Contexto
 

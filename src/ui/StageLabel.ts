@@ -33,6 +33,6 @@ function labelFor(combat: CombatState): string {
   const { stage } = combat;
   if (combat.mode === 'farming') return `Estágio ${stage.stageNumber} · farmando`;
   if (getCurrentEnemy(stage).kind === 'boss') return `Estágio ${stage.stageNumber} · BOSS`;
-  const monsters = stage.enemies.length - 1;
-  return `Estágio ${stage.stageNumber} · monstro ${stage.currentEnemyIndex + 1}/${monsters}`;
+  const position = `${stage.currentEnemyIndex + 1}/${stage.enemies.length}`;
+  return `Estágio ${stage.stageNumber} · inimigo ${position}`;
 }

@@ -35,7 +35,8 @@
 - [x] Compra de upgrades via UI (modos x1, x10 e Máx)
 - [x] Progressão de boss (timer de 30 s, farm e "Enfrentar boss")
 - [x] Simulações de balanço do "fácil demais" (playtest de 2026-10-17): HP inicial ×3 e crescimento ×1.18 por estágio (ver `docs/decisions/0016`); o sim agora mede a 1ª derrota de boss e um perfil casual
-- [ ] Tirar o crítico do jogo base (pedido do criador em 2026-10-17): hoje o clique crita (12% ×2.5, 1% ×10). A chance de crítico deve virar estado do clique começando em 0%, mantendo multiplicadores e estilos de número prontos para o upgrade
+- [x] Zona com 9 monstros em rampa de HP (10 → 100), boss de 1k e ouro proporcional ao HP, depois do playtest "muito travado" (ver `docs/decisions/0017`)
+- [x] Tirar o crítico do jogo base: a chance vira estado do clique começando em 0% (ver `docs/decisions/0018`)
 - [ ] Save/load LocalStorage
 - [ ] Polimento básico de UX
 
