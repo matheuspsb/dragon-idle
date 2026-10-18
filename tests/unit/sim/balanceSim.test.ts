@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { runBalanceSim, type BalanceSimConfig } from '../../../src/sim/balanceSim';
+import { BOSS_TIME_LIMIT_SECONDS } from '../../../src/config/stageConfig';
 
 const TEN_MINUTES: BalanceSimConfig = {
   durationSeconds: 600,
@@ -98,5 +99,18 @@ describe('runBalanceSim first boss failure', () => {
 
     expect(active.bossFailures).toBe(0);
     expect(active.firstBossFailureAtSeconds).toBeNull();
+  });
+});
+
+describe('runBalanceSim boss kill times', () => {
+  it('records how long each won boss fight took, within the time limit', () => {
+    const active = runBalanceSim(TEN_MINUTES);
+
+    expect(active.bossKills.length).toBe(active.finalStage - 1);
+    active.bossKills.forEach((kill, i) => {
+      expect(kill.stage).toBe(i + 1);
+      expect(kill.seconds).toBeGreaterThan(0);
+      expect(kill.seconds).toBeLessThanOrEqual(BOSS_TIME_LIMIT_SECONDS);
+    });
   });
 });

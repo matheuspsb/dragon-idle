@@ -27,6 +27,11 @@ export interface StageTimelineEntry {
   reachedAtSeconds: number;
 }
 
+export interface BossKill {
+  stage: number;
+  seconds: number;
+}
+
 export interface BalanceSimResult {
   stageTimeline: StageTimelineEntry[];
   finalStage: number;
@@ -36,6 +41,7 @@ export interface BalanceSimResult {
   goldSpent: Decimal;
   bossFailures: number;
   firstBossFailureAtSeconds: number | null;
+  bossKills: BossKill[];
 }
 
 function validate(config: BalanceSimConfig): void {
@@ -123,10 +129,12 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
   let clickBudget = 0;
   let bossFailures = 0;
   let firstBossFailureAtSeconds: number | null = null;
+  const bossKills: BossKill[] = [];
 
   const steps = Math.round(durationSeconds / stepSeconds);
   for (let i = 1; i <= steps; i++) {
     const events: CombatEvent[] = [];
+    const bossTimeLeftBefore = combat.bossTimeLeftSeconds;
 
     clickBudget += clicksPerSecond * stepSeconds;
     while (clickBudget >= 1) {
@@ -136,6 +144,18 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
     events.push(...tickAutoDps(knightsState, combat, stepSeconds));
 
     goldEarned = goldEarned.add(collectGold(wallet, events));
+    for (const event of events) {
+      if (!event.stageCleared) continue;
+      // Step resolution: a boss that appeared and died in the same step counts one step.
+      const elapsed =
+        bossTimeLeftBefore === null
+          ? stepSeconds
+          : BOSS_TIME_LIMIT_SECONDS - bossTimeLeftBefore + stepSeconds;
+      bossKills.push({
+        stage: (event.newStageNumber ?? combat.stage.stageNumber) - 1,
+        seconds: Math.min(BOSS_TIME_LIMIT_SECONDS, elapsed),
+      });
+    }
     if (tickBossTimer(combat, stepSeconds)) {
       bossFailures += 1;
       firstBossFailureAtSeconds ??= i * stepSeconds;
@@ -171,5 +191,6 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
     goldSpent,
     bossFailures,
     firstBossFailureAtSeconds,
+    bossKills,
   };
 }

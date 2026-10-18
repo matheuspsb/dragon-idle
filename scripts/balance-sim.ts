@@ -32,6 +32,14 @@ function formatDuration(totalSeconds: number): string {
   return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 }
 
+function medianBossSeconds(result: BalanceSimResult, from: number, to: number): string {
+  const times = result.bossKills
+    .filter((kill) => kill.stage >= from && kill.stage <= to)
+    .map((kill) => kill.seconds)
+    .sort((a, b) => a - b);
+  return times.length === 0 ? '—' : `${times[Math.floor(times.length / 2)].toFixed(1)} s`;
+}
+
 function stageRows(result: BalanceSimResult, durationSeconds: number) {
   const reachedAt = (stage: number) => result.stageTimeline[stage - 1]?.reachedAtSeconds;
   return MILESTONE_STAGES.filter((stage) => stage <= result.finalStage).map((stage) => {
@@ -69,6 +77,9 @@ for (const clicksPerSecond of profiles) {
   const label = clicksPerSecond === 0 ? 'idle (sem clique)' : `${clicksPerSecond} cliques/s`;
   console.log(`\n== Perfil ${label} — simulado em ${elapsed} s`);
   console.table(stageRows(result, durationSeconds));
+  console.log(
+    `Boss (mediana): zonas 2–10 ${medianBossSeconds(result, 2, 10)} | 11–30 ${medianBossSeconds(result, 11, 30)} | 31–60 ${medianBossSeconds(result, 31, 60)}`
+  );
   console.log(
     `Estágio final: ${result.finalStage} | clique nv ${result.clickLevel} | cavaleiros nv ${result.knightLevels.join(', ')} | bosses perdidos: ${result.bossFailures} | 1ª derrota de boss: ${result.firstBossFailureAtSeconds === null ? '—' : formatDuration(result.firstBossFailureAtSeconds)}`
   );
