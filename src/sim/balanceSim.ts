@@ -35,6 +35,7 @@ export interface BalanceSimResult {
   goldEarned: Decimal;
   goldSpent: Decimal;
   bossFailures: number;
+  firstBossFailureAtSeconds: number | null;
 }
 
 function validate(config: BalanceSimConfig): void {
@@ -119,6 +120,7 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
   let goldSpent = new Decimal(0);
   let clickBudget = 0;
   let bossFailures = 0;
+  let firstBossFailureAtSeconds: number | null = null;
 
   const steps = Math.round(durationSeconds / stepSeconds);
   for (let i = 1; i <= steps; i++) {
@@ -132,7 +134,10 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
     events.push(...tickAutoDps(knightsState, combat, stepSeconds));
 
     goldEarned = goldEarned.add(collectGold(wallet, events));
-    if (tickBossTimer(combat, stepSeconds)) bossFailures += 1;
+    if (tickBossTimer(combat, stepSeconds)) {
+      bossFailures += 1;
+      firstBossFailureAtSeconds ??= i * stepSeconds;
+    }
     goldSpent = goldSpent.add(buyGreedily(wallet, click, knightsState, clicksPerSecond));
 
     if (
@@ -163,5 +168,6 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
     goldEarned,
     goldSpent,
     bossFailures,
+    firstBossFailureAtSeconds,
   };
 }

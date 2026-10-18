@@ -8,6 +8,14 @@ const TEN_MINUTES: BalanceSimConfig = {
   seed: 1,
 };
 
+// The idle start is slow (one starting knight, no clicks), so idle checks that
+// need real progress run for an hour instead of ten minutes.
+const IDLE_ONE_HOUR: BalanceSimConfig = {
+  ...TEN_MINUTES,
+  durationSeconds: 3600,
+  clicksPerSecond: 0,
+};
+
 describe('runBalanceSim', () => {
   it('is deterministic for the same config and seed', () => {
     const a = runBalanceSim(TEN_MINUTES);
@@ -42,7 +50,7 @@ describe('runBalanceSim', () => {
   });
 
   it('never upgrades the click when the player does not click', () => {
-    const idle = runBalanceSim({ ...TEN_MINUTES, clicksPerSecond: 0 });
+    const idle = runBalanceSim(IDLE_ONE_HOUR);
 
     expect(idle.clickLevel).toBe(1);
     expect(idle.knightLevels[0]).toBeGreaterThan(1);
@@ -68,10 +76,27 @@ describe('runBalanceSim', () => {
 
 describe('runBalanceSim with boss fights', () => {
   it('counts boss failures and still progresses by farming and retrying', () => {
-    // The idle start is slow: the first boss is lost and only beaten after farming.
-    const idle = runBalanceSim({ ...TEN_MINUTES, durationSeconds: 15 * 60, clicksPerSecond: 0 });
+    // The first boss is lost and only beaten after farming for upgrades.
+    const idle = runBalanceSim(IDLE_ONE_HOUR);
 
     expect(idle.bossFailures).toBeGreaterThan(0);
     expect(idle.finalStage).toBeGreaterThan(1);
+  });
+});
+
+describe('runBalanceSim first boss failure', () => {
+  it('records when the first boss was lost', () => {
+    const idle = runBalanceSim({ ...TEN_MINUTES, clicksPerSecond: 0 });
+
+    expect(idle.firstBossFailureAtSeconds).not.toBeNull();
+    expect(idle.firstBossFailureAtSeconds!).toBeGreaterThan(0);
+    expect(idle.firstBossFailureAtSeconds!).toBeLessThanOrEqual(TEN_MINUTES.durationSeconds);
+  });
+
+  it('is null when no boss was ever lost', () => {
+    const active = runBalanceSim({ ...TEN_MINUTES, durationSeconds: 60 });
+
+    expect(active.bossFailures).toBe(0);
+    expect(active.firstBossFailureAtSeconds).toBeNull();
   });
 });

@@ -13,7 +13,7 @@ const MILESTONE_STAGES = [5, 10, 20, 30, 40, 50, 75, 100, 150, 200, 300, 500, 10
 const { values } = parseArgs({
   options: {
     hours: { type: 'string', default: '4' },
-    cps: { type: 'string', default: '0,5' },
+    cps: { type: 'string', default: '0,2,5' },
     seed: { type: 'string', default: '1' },
     step: { type: 'string', default: '0.1' },
   },
@@ -71,6 +71,6 @@ for (const clicksPerSecond of profiles) {
   console.log(`\n== Perfil ${label} — simulado em ${elapsed} s`);
   console.table(stageRows(result, durationSeconds));
   console.log(
-    `Estágio final: ${result.finalStage} | clique nv ${result.clickLevel} | cavaleiros nv ${result.knightLevels.join(', ')} | bosses perdidos: ${result.bossFailures}`
+    `Estágio final: ${result.finalStage} | clique nv ${result.clickLevel} | cavaleiros nv ${result.knightLevels.join(', ')} | bosses perdidos: ${result.bossFailures} | 1ª derrota de boss: ${result.firstBossFailureAtSeconds === null ? '—' : formatDuration(result.firstBossFailureAtSeconds)}`
   );
 }
