@@ -35,9 +35,9 @@ test('clicking the enemy damages it right away', async ({ page }) => {
 });
 
 test('clicking outside the enemy does not damage it', async ({ page }) => {
-  // Make a click lethal (≈24 damage vs 20 HP) so a stray hit can't hide among
+  // Make a click lethal (≈112 damage vs 60 HP) so a stray hit can't hide among
   // the knight's 1-damage hits; then allow only what the knight does meanwhile.
-  await grantGold(page, 300);
+  await grantGold(page, 400);
   await clickCanvas(page, maxModeButton);
   await clickCanvas(page, clickUpgradeRow);
   const before = await snapshot(page);

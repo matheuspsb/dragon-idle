@@ -76,19 +76,19 @@ Código: `src/core/systems/stageGenerator.ts`, `src/core/systems/critRoll.ts`, `
 **Inimigos por estágio:** 5 monstros + 1 boss.
 
 ```
-HP_monstro(s)   = 20 × 1.15^(s − 1)
+HP_monstro(s)   = 60 × 1.18^(s − 1)
 ouro_monstro(s) =  1 × 1.15^(s − 1)
 boss            = 8 × monstro   (HP e ouro)
 ```
 
-Totais por estágio: `HP(s) = 260 × 1.15^(s − 1)` e `ouro(s) = 13 × 1.15^(s − 1)`.
+Totais por estágio: `HP(s) = 780 × 1.18^(s − 1)` e `ouro(s) = 13 × 1.15^(s − 1)`. O HP cresce mais rápido que o ouro de propósito (ver [0016](decisions/0016-hp-dos-monstros-x3-e-crescimento-1-18.md)).
 
 **Tempo para limpar um estágio:** `t(s) = HP(s) / DPS`.
 
 **Timer de boss** (ver [0015](decisions/0015-timer-de-boss-com-farm.md)): o boss tem 30 s. Para vencê-lo é preciso
 
 ```
-DPS ≥ HP_boss(s) / 30 = 8 × 20 × 1.15^(s − 1) / 30 ≈ 5.33 × 1.15^(s − 1)
+DPS ≥ HP_boss(s) / 30 = 8 × 60 × 1.18^(s − 1) / 30 = 16 × 1.18^(s − 1)
 ```
 
 Se falhar, o jogador farma o estágio (só monstros, com ouro) até conseguir esse DPS e desafiar de novo.
@@ -105,16 +105,16 @@ E = 1 + 0.12 × (2.5 − 1) + 0.01 × (10 − 1) = 1.27
 
 ## Condição de equilíbrio (a "parede")
 
-Para avançar um estágio, o dano precisa crescer `× 1.15` (o crescimento do HP). Ignorando o termo linear, o dano cresce `m^(1/M)` por nível, então são necessários
+Para avançar um estágio, o dano precisa crescer `× 1.18` (o crescimento do HP). Ignorando o termo linear, o dano cresce `m^(1/M)` por nível, então são necessários
 
 ```
-níveis por estágio = ln(1.15) / ln(m^(1/M))
+níveis por estágio = ln(1.18) / ln(m^(1/M))
 ```
 
 e o custo desses níveis cresce, por estágio,
 
 ```
-crescimento do custo por estágio = 1.15^( ln r / ln(m^(1/M)) )
+crescimento do custo por estágio = 1.18^( ln r / ln(m^(1/M)) )
 ```
 
 O jogo só se sustenta se o ouro por estágio crescer pelo menos isso:
@@ -123,7 +123,7 @@ O jogo só se sustenta se o ouro por estágio crescer pelo menos isso:
 crescimento do ouro ≥ crescimento_HP^( ln r / ln(m^(1/M)) )
 ```
 
-Com os valores atuais (`m = 4`): `ln 1.07 / (ln 4 / 25) ≈ 1.22`, então o ouro precisaria crescer `1.15^1.22 ≈ 1.186` por estágio. Ele cresce `1.15`, **um pouco abaixo de propósito**: a parede existe, mas só chega depois de algumas horas, o que leva o jogador ao rebirth (Fase 3). Com `m = 2` o necessário era `≈ 1.41` e a parede chegava em ~40 min (ver [0011](decisions/0011-milestone-x4-para-adiar-a-parede.md)).
+Com os valores atuais (`m = 4`, HP ×1.18): `ln 1.07 / (ln 4 / 25) ≈ 1.22`, então o ouro precisaria crescer `1.18^1.22 ≈ 1.224` por estágio. Ele cresce `1.15`, **abaixo de propósito**: a parede é a barreira que leva ao rebirth (Fase 3), e chega entre os estágios 50 e 100 no jogo ativo (ver [0016](decisions/0016-hp-dos-monstros-x3-e-crescimento-1-18.md)). Histórico: com `m = 2` e HP ×1.15 o necessário era `≈ 1.41` (parede em ~40 min, ver [0011](decisions/0011-milestone-x4-para-adiar-a-parede.md)); com `m = 4` e HP ×1.15 era `≈ 1.186` (sem barreira até ~200, o "fácil demais" do playtest).
 
 Alavancas, se for preciso mover a parede de novo:
 
@@ -143,21 +143,23 @@ Alavancas, se for preciso mover a parede de novo:
 
 **Teto de velocidade:** cada golpe mata no máximo um inimigo (o overkill é perdido) e um estágio tem 6 inimigos. Com dano sobrando, o tempo por estágio para em `6 / golpes por segundo` (6 s no idle com 1 cavaleiro; ~1 s no ativo a 5 cliques/s). Quando o sim mostra esse piso, não há parede: o jogo virou corrida.
 
-**Medições de 2026-10-15** (4 h, seed 1; "tempo/estágio" é o tempo gasto no estágio indicado):
+**Medições de 2026-10-15, curva antiga (HP 20, ×1.15, com crítico)** (4 h, seed 1; "tempo/estágio" é o tempo gasto no estágio indicado):
 
-| Variante                          | Ouro necessário | Ativo: estágio final | Ativo: tempo/estágio no 100 | Idle: estágio final |
-| --------------------------------- | --------------- | -------------------- | --------------------------- | ------------------- |
-| Anterior (×2 a cada 25)           | ×1.406          | 102                  | ~13 min                     | 67                  |
-| Ouro ×1.40 por estágio            | ×1.406          | 4521                 | 1 s (piso)                  | 2131                |
-| **Atual: milestone ×4 a cada 25** | ×1.186          | 313                  | 4 s (parede ~estágio 300)   | 184                 |
-| Milestone ×2 a cada 10            | ×1.146          | 11921                | 1 s (piso)                  | 2179                |
+| Variante                                 | Ouro necessário | Ativo: estágio final | Ativo: tempo/estágio no 100 | Idle: estágio final |
+| ---------------------------------------- | --------------- | -------------------- | --------------------------- | ------------------- |
+| Anterior (×2 a cada 25)                  | ×1.406          | 102                  | ~13 min                     | 67                  |
+| Ouro ×1.40 por estágio                   | ×1.406          | 4521                 | 1 s (piso)                  | 2131                |
+| Milestone ×4 a cada 25 (adotado em 0011) | ×1.186          | 313                  | 4 s (parede ~estágio 300)   | 184                 |
+| Milestone ×2 a cada 10                   | ×1.146          | 11921                | 1 s (piso)                  | 2179                |
 
 Todas as variantes usam ouro ×1.15 por estágio, exceto a que muda o ouro. Leitura: no equilíbrio ou acima dele (ouro ≥ necessário) não existe parede; um pouco abaixo dele a parede só chega horas depois, o que combina com o rebirth da Fase 3.
 
-**Com timer de boss (2026-10-17, 8 h, seed 1):** ativo chega ao estágio 50 em 4 min (igual), 300 em 4h17 (antes 3h00) e termina no 328 com 20 bosses perdidos; idle termina no 202 com 36 perdidos (antes 226).
+**Com timer de boss, ainda na curva antiga (2026-10-17, 8 h, seed 1):** ativo chega ao estágio 50 em 4 min (igual), 300 em 4h17 (antes 3h00) e termina no 328 com 20 bosses perdidos; idle termina no 202 com 36 perdidos (antes 226).
 
-**Curva sem timer de boss, em 8 h** (seed 1): no ativo, estágio 200 em 28 min e 300 em 3 h, terminando no 347 (só +34 estágios entre a 4ª e a 8ª hora, ~5,5 min por estágio no 300); no idle, estágio 100 em 1h16 e 200 em 5h07, terminando no 226.
+**Curva antiga sem timer de boss, em 8 h** (seed 1): no ativo, estágio 200 em 28 min e 300 em 3 h, terminando no 347 (só +34 estágios entre a 4ª e a 8ª hora, ~5,5 min por estágio no 300); no idle, estágio 100 em 1h16 e 200 em 5h07, terminando no 226.
 
 ## Observações de playtest
 
-- **2026-10-17:** o criador jogou um pouco e chegou ao **estágio 57 sem o mínimo de esforço** — está fácil demais. Bate com o sim (perfil ativo chega ao estágio 50 em ~4 min). Rodar simulações e ajustar depois que o timer de boss existir, já que ele muda a parede.
+- **2026-10-17:** o criador jogou um pouco e chegou ao **estágio 57 sem o mínimo de esforço** — está fácil demais; a vida dos monstros e bosses ficava bem abaixo do ideal ao subir de zona. Bate com o sim (perfil ativo chegava ao estágio 50 em ~4 min). **Resolvido em 0016:** HP inicial ×3 e crescimento ×1.18; sem crítico, o ativo chega ao 50 em ~22 min e encontra a barreira entre 50 e 100.
+
+**Curva atual (0016), 2026-10-17, 8 h, seed 1, sem crítico:** ativo (5 cliques/s) chega ao estágio 50 em 22 min, 100 em 2h04 e termina no 130 (14 bosses perdidos); casual (2/s) 50 em 58 min, 100 em 6h45, final 106; idle termina no 66. Com o crítico ainda ligado, o ativo chega ao 50 em 17 min. A varredura completa de alternativas está em [0016](decisions/0016-hp-dos-monstros-x3-e-crescimento-1-18.md).

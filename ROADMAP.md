@@ -34,7 +34,7 @@
 - [x] Clique funcional com feedback (números flutuantes por tipo de golpe, com pool de objetos)
 - [x] Compra de upgrades via UI (modos x1, x10 e Máx)
 - [x] Progressão de boss (timer de 30 s, farm e "Enfrentar boss")
-- [ ] Rodar simulações de balanço: no playtest de 2026-10-17 o criador chegou ao estágio 57 sem esforço (fácil demais); medir de novo com o timer de boss e ajustar. No mesmo playtest a barra de 30 s do boss demorou a aparecer — provavelmente porque o boss morria quase na hora; confirmar com o sim
+- [x] Simulações de balanço do "fácil demais" (playtest de 2026-10-17): HP inicial ×3 e crescimento ×1.18 por estágio (ver `docs/decisions/0016`); o sim agora mede a 1ª derrota de boss e um perfil casual
 - [ ] Tirar o crítico do jogo base (pedido do criador em 2026-10-17): hoje o clique crita (12% ×2.5, 1% ×10). A chance de crítico deve virar estado do clique começando em 0%, mantendo multiplicadores e estilos de número prontos para o upgrade
 - [ ] Save/load LocalStorage
 - [ ] Polimento básico de UX

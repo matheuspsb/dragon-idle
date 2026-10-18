@@ -1,7 +1,7 @@
 # 0004 — Combate por estágios com críticos em camadas
 
 - **Data:** 2026-08-26 (registrada retroativamente em 2026-10-15)
-- **Status:** aceita
+- **Status:** aceita; a curva de HP (base 20, ×1.15) foi substituída por 0016
 
 ## Contexto
 
