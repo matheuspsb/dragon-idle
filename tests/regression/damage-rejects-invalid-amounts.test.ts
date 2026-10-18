@@ -5,6 +5,7 @@
  * NaN, o que contava como derrota e entregava ouro sem dano real.
  */
 import { describe, expect, it } from 'vitest';
+import { STARTING_CRIT_CHANCES } from '../../src/config/critConfig';
 import { createEnemy } from '../../src/core/entities/Enemy';
 import { applyDamage, applyFlatDamage } from '../../src/core/systems/damage';
 import { createCombatState, resolveAutoHit } from '../../src/core/systems/combatSystem';
@@ -23,7 +24,7 @@ describe('damage rejects invalid amounts', () => {
   it.each(INVALID_DAMAGE)('applyDamage(%s) throws and leaves hp untouched', (damage) => {
     const enemy = createEnemy({ kind: 'monster', hp: 10, goldReward: 1 });
 
-    expect(() => applyDamage(enemy, damage, rngNormal)).toThrow(RangeError);
+    expect(() => applyDamage(enemy, damage, rngNormal, STARTING_CRIT_CHANCES)).toThrow(RangeError);
     expect(enemy.hp.toNumber()).toBe(10);
   });
 

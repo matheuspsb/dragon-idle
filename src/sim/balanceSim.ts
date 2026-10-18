@@ -60,7 +60,7 @@ function upgradeCandidates(
   knightsState: KnightsState,
   clicksPerSecond: number
 ): UpgradeCandidate[] {
-  const clickDps = clicksPerSecond * expectedHitMultiplier();
+  const clickDps = clicksPerSecond * expectedHitMultiplier(click.critChances);
   return [
     { target: click, dpsGain: nextLevelGain(click.baseDamage, click.level).mul(clickDps) },
     ...knightsState.knights.map((knight) => ({
@@ -91,7 +91,9 @@ function expectedDps(
   knightsState: KnightsState,
   clicksPerSecond: number
 ): Decimal {
-  const clickDps = getClickDamage(click).mul(clicksPerSecond * expectedHitMultiplier());
+  const clickDps = getClickDamage(click).mul(
+    clicksPerSecond * expectedHitMultiplier(click.critChances)
+  );
   return knightsState.knights.reduce(
     (total, knight) => total.add(getKnightDamage(knight).div(knight.attackIntervalSeconds)),
     clickDps
@@ -129,7 +131,7 @@ export function runBalanceSim(config: BalanceSimConfig): BalanceSimResult {
     clickBudget += clicksPerSecond * stepSeconds;
     while (clickBudget >= 1) {
       clickBudget -= 1;
-      events.push(resolveHit(combat, getClickDamage(click), rng));
+      events.push(resolveHit(combat, getClickDamage(click), rng, click.critChances));
     }
     events.push(...tickAutoDps(knightsState, combat, stepSeconds));
 

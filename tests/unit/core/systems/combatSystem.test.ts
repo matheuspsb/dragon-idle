@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { STARTING_CRIT_CHANCES } from '../../../../src/config/critConfig';
 import { createCombatState } from '../../../../src/core/systems/combatSystem';
 import { getCurrentEnemy } from '../../../../src/core/entities/Stage';
 import { resolveAutoHit, resolveHit } from '../../../../src/core/systems/combatSystem';
@@ -8,7 +9,7 @@ const rngNormal = () => 0.5;
 describe('resolveHit', () => {
   it('does not advance or clear the stage on a non-lethal hit', () => {
     const state = createCombatState(1);
-    const event = resolveHit(state, 1, rngNormal);
+    const event = resolveHit(state, 1, rngNormal, STARTING_CRIT_CHANCES);
 
     expect(event.enemyDefeated).toBe(false);
     expect(event.stageCleared).toBe(false);
@@ -19,7 +20,7 @@ describe('resolveHit', () => {
   it('advances to the next enemy when a non-boss enemy is defeated', () => {
     const state = createCombatState(1);
     const currentEnemy = getCurrentEnemy(state.stage);
-    const event = resolveHit(state, currentEnemy.hp, rngNormal);
+    const event = resolveHit(state, currentEnemy.hp, rngNormal, STARTING_CRIT_CHANCES);
 
     expect(event.enemyDefeated).toBe(true);
     expect(event.enemyKind).toBe('monster');
@@ -35,7 +36,7 @@ describe('resolveHit', () => {
     const previousStageNumber = state.stage.stageNumber;
     const previousStage = state.stage;
 
-    const event = resolveHit(state, boss.hp, rngNormal);
+    const event = resolveHit(state, boss.hp, rngNormal, STARTING_CRIT_CHANCES);
 
     expect(event.enemyDefeated).toBe(true);
     expect(event.enemyKind).toBe('boss');

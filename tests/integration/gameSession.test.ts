@@ -101,8 +101,15 @@ describe('clicking in a game session', () => {
     expect(enemy.hp.eq(enemy.maxHp.sub(getClickDamage(session.click)))).toBe(true);
   });
 
-  it('applies crits from the injected rng', () => {
+  it('never crits by default, even on the luckiest roll', () => {
     const session = createGameSession({ rng: rngSuperCrit });
+
+    expect(clickGameSession(session).outcome).toBe('normal');
+  });
+
+  it('applies crits from the injected rng once the click has crit chance', () => {
+    const session = createGameSession({ rng: rngSuperCrit });
+    session.click.critChances = { crit: 0.12, superCrit: 0.01 };
 
     const event = clickGameSession(session);
 
@@ -127,6 +134,7 @@ describe('clicking in a game session', () => {
   it('is reproducible with a seeded rng', () => {
     const outcomes = (seed: number) => {
       const session = createGameSession({ rng: createSeededRng(seed) });
+      session.click.critChances = { crit: 0.12, superCrit: 0.01 };
       return Array.from({ length: 50 }, () => clickGameSession(session).outcome);
     };
 

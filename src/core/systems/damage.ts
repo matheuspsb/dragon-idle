@@ -3,7 +3,7 @@ import { Decimal } from '../../utils/Decimal';
 import type { DecimalSource } from '../../utils/Decimal';
 import { isEnemyDefeated, type Enemy } from '../entities/Enemy';
 import { rollHitOutcome } from './critRoll';
-import { HIT_MULTIPLIERS, type HitOutcome } from '../../config/critConfig';
+import { HIT_MULTIPLIERS, type CritChances, type HitOutcome } from '../../config/critConfig';
 
 export interface DamageResult {
   outcome: HitOutcome;
@@ -32,9 +32,14 @@ function toValidDamage(baseDamage: DecimalSource): Decimal {
   return damage;
 }
 
-export function applyDamage(enemy: Enemy, baseDamage: DecimalSource, rng: Rng): DamageResult {
+export function applyDamage(
+  enemy: Enemy,
+  baseDamage: DecimalSource,
+  rng: Rng,
+  critChances: CritChances
+): DamageResult {
   const damage = toValidDamage(baseDamage);
-  const outcome = rollHitOutcome(rng);
+  const outcome = rollHitOutcome(rng, critChances);
   return buildDamageResult(enemy, outcome, damage.mul(HIT_MULTIPLIERS[outcome]));
 }
 

@@ -6,6 +6,7 @@ import type { Enemy, EnemyKind } from '../entities/Enemy';
 import { applyDamage, applyFlatDamage, type DamageResult } from './damage';
 import { createStage } from './stageGenerator';
 import type { CombatState } from '../state/CombatState';
+import type { CritChances } from '../../config/critConfig';
 import { BOSS_TIME_LIMIT_SECONDS } from '../../config/stageConfig';
 
 export function createCombatState(startingStageNumber = 1): CombatState {
@@ -56,9 +57,14 @@ function finalizeHit(state: CombatState, enemy: Enemy, damageResult: DamageResul
   return event;
 }
 
-export function resolveHit(state: CombatState, baseDamage: DecimalSource, rng: Rng): CombatEvent {
+export function resolveHit(
+  state: CombatState,
+  baseDamage: DecimalSource,
+  rng: Rng,
+  critChances: CritChances
+): CombatEvent {
   const enemy = getCurrentEnemy(state.stage);
-  const damageResult = applyDamage(enemy, baseDamage, rng);
+  const damageResult = applyDamage(enemy, baseDamage, rng, critChances);
   return finalizeHit(state, enemy, damageResult);
 }
 

@@ -64,7 +64,12 @@ export function advanceGameSession(session: GameSession, deltaSeconds: number): 
 }
 
 export function clickGameSession(session: GameSession): CombatEvent {
-  const event = resolveHit(session.combat, getClickDamage(session.click), session.rng);
+  const event = resolveHit(
+    session.combat,
+    getClickDamage(session.click),
+    session.rng,
+    session.click.critChances
+  );
   collectGold(session.wallet, [event]);
   return event;
 }
